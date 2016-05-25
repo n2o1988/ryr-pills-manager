@@ -1,33 +1,35 @@
 {
-  "name": "boilerplate",
-  "productName": "Boilerplate",
-  "description": "An Electron boilerplate project",
-  "version": "1.1.1",
-  "author": "Andreas Gerlach <andi@appelgriebsch.org>",
+  "name": "har-api-debugger",
+  "productName": "Har Api Debugger",
+  "description": "A tool to help debugging API-based applications by using a .har archive from a front-end session",
+  "version": "0.1.0",
+  "author": "Lamberto Fichera <fichera.lamberto@gmail.com>",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/appelgriebsch/electron-boilerplate.git"
+    "url": "git+https://github.com/n2o1988/har-api-debugger.git"
   },
   "keywords": [
+    "har",
     "electron",
-    "boilerplate",
+    "debugger",
+    "api",
     "angularjs"
   ],
   "config": {
-    "id": "com.appelgriebsch.electron-boilerplate",
+    "id": "com.lworks.har-api-debbuger",
     "ico": "assets/boilerplate.ico",
     "icns": "assets/boilerplate.icns",
     "png": "assets/boilerplate.png"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/appelgriebsch/electron-boilerplate/issues"
+    "url": "https://github.com/n2o1988/har-api-debugger/issues"
   },
-  "homepage": "https://github.com/appelgriebsch/electron-boilerplate#readme",
+  "homepage": "https://github.com/n2o1988/har-api-debugger#readme",
   "dependencies": {
     "angular": "^1.5.0",
     "angular-animate": "^1.5.0",
@@ -49,6 +51,7 @@
     "levelgraph-jsonld": "^0.5.0",
     "levelgraph-n3": "^1.0.0",
     "levelgraph-query": "^1.0.4",
+    "lf-ng-md-file-input": "^1.4.6",
     "mime": "^1.3.4",
     "node-servicefinder": "appelgriebsch/node-servicefinder",
     "pouchdb": "^5.1.0",

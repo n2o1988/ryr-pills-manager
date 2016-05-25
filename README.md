@@ -1,5 +1,6 @@
-# electron-boilerplate
-An electron boilerplate project incl. PouchDB, AngularJS + Material Design
+# har-api-debugger
+A tool to help debugging API-based applications by using a .har archive from a front-end session,
+based on elelctron-boilerplate
 
 ## Included modules
 * [Electron](http://electron.atom.io)

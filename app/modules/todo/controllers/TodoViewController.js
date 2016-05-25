@@ -172,6 +172,80 @@
         return;
       });
     });
+
+
+    // TEST
+    const trackedAPIs = [
+      {
+        name: 'DotRez',
+        url: 'https://localhost:3000/tripsapi/',
+        debugUrl: null,
+        ignoredHeaders: ['cookie']
+      }
+    ];
+    const createSingleRegExpPattern = item => `(${item}*)`;
+    const createRegExpFromTrackedAPIsList = (list) => {
+      const pattern = list.map(createSingleRegExpPattern).join('|');
+      return new RegExp(pattern, 'i');
+    };
+    const decorateTrackedList = (list) => {
+      list.forEach(item => {
+        if (item.url) {
+          item.regExp = new RegExp(createSingleRegExpPattern(item.url), 'i');
+        }
+        const ignoredHeaders = (item.ignoredHeaders || []).concat([':\\w+']).map(header => `(${header})`);
+        item.ignoredHeadersRegExp = new RegExp(ignoredHeaders.join('|'));
+      });
+    };
+    const REGEXP = createRegExpFromTrackedAPIsList(trackedAPIs.map(e => e.url));
+    const match = (entry) => entry && entry.request && REGEXP.test(entry.request.url);
+    const getTrackedApi = (url) => trackedAPIs.filter(api => api.regExp).find(api => api.regExp.test(url));
+    const filterIgnoredHeaders = header => !trackedAPIs.some(api => api.ignoredHeadersRegExp.test(header.name));
+    decorateTrackedList(trackedAPIs);
+
+    const processHar = (data) => {
+      const relevantHistory = [];
+      if (data && data.log && data.log.entries) {
+        data.log.entries.forEach(entry => {
+          if (match(entry)) {
+            const trackedAPI = getTrackedApi(entry.request.url);
+            relevantHistory.push({
+              url: entry.request.url,
+              method: entry.request.method,
+              startTime: entry.startedDateTime,
+              trackedAPI,
+              request: {
+                headers: entry.request.headers.filter(filterIgnoredHeaders),
+                data: entry.request.postData,
+                queryString: entry.request.queryString
+              },
+              response: {
+                headers: entry.response.headers.filter(filterIgnoredHeaders),
+                data: entry.response.content,
+                status: entry.response.status,
+                statusText: entry.response.statusText
+              }
+            });
+          }
+        });
+      }
+      return relevantHistory;
+    };
+
+    const fs = require('fs');
+    $scope.$watch('files.length', (length) => {
+      if (length) {
+        console.log('changing to: ', $scope.files[0]);
+        fs.readFile($scope.files[0].lfFile.path, 'utf8', (err, data) => {
+          if (!err) {
+            const jsonData = JSON.parse(data);
+            console.log(jsonData);
+            const session = processHar(jsonData);
+            console.log(session);
+          }
+        });
+      }
+    });
   }
 
   module.exports = TodoViewController;
