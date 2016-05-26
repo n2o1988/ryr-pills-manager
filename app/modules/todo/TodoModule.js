@@ -51,6 +51,8 @@
     angular.module('electron-app').service('TodoDataService', ['PouchDBService', TodoDataService]);
     angular.module('electron-app').controller('TodoViewController', ['$scope', '$state', '$q', '$mdDialog', 'TodoDataService', TodoViewController]);
     angular.module('electron-app').controller('TodoViewStatusController', ['$scope', '$state', '$stateParams', '$q', 'TodoDataService', TodoViewStatusController]);
+
+    angular.module('electron-app').component('fileInput', require('./directives/file-input'));
   }
 
   module.exports = TodoModule;

@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('electron-app', ['ngMaterial', 'ngSanitize', 'ui.router', 'ngAnimate', 'angular-timeline',
-    'angular-centered', 'lfNgMdFileInput'])
+    'angular-centered', 'ngMessages'])
     .config(function($mdThemingProvider) {
       $mdThemingProvider.theme('default')
         .primaryPalette('blue')

@@ -180,7 +180,8 @@
         name: 'DotRez',
         url: 'https://localhost:3000/tripsapi/',
         debugUrl: null,
-        ignoredHeaders: ['cookie']
+        ignoredHeaders: ['cookie'],
+        localePattern: ''
       }
     ];
     const createSingleRegExpPattern = item => `(${item}*)`;
@@ -213,6 +214,7 @@
               url: entry.request.url,
               method: entry.request.method,
               startTime: entry.startedDateTime,
+              shortApiName: entry.request.url.substr(trackedAPI.url.length),
               trackedAPI,
               request: {
                 headers: entry.request.headers.filter(filterIgnoredHeaders),
@@ -233,10 +235,10 @@
     };
 
     const fs = require('fs');
-    $scope.$watch('files.length', (length) => {
-      if (length) {
-        console.log('changing to: ', $scope.files[0]);
-        fs.readFile($scope.files[0].lfFile.path, 'utf8', (err, data) => {
+    this.onFileChanged = (file) => {
+      if (file) {
+        console.log('changing to: ', file);
+        fs.readFile(file.path, 'utf8', (err, data) => {
           if (!err) {
             const jsonData = JSON.parse(data);
             console.log(jsonData);
@@ -245,7 +247,7 @@
           }
         });
       }
-    });
+    };
   }
 
   module.exports = TodoViewController;

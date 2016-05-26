@@ -37,3 +37,13 @@ md-grid-tile:focus {
 .selectionBorder {
   outline: -webkit-focus-ring-color auto 5px;
 }
+
+
+/* components */
+file-input .file-name{
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 12px;
+  text-transform: none;
+  opacity: .7;
+}
