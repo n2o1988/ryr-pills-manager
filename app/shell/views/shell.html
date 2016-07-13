@@ -5,7 +5,8 @@
       <md-progress-circular class="md-accent" md-mode="indeterminate"></md-progress-circular>
     </div>
   </centered>
-  <md-toolbar class="md-whiteframe-z3">
+  <md-toolbar class="md-whiteframe-z3 main-toolbar">
+    <!--
     <div ng-if="shell.platform() === 'darwin'" class="md-toolbar-tools windows-controls" flex layout-align="start start">
       <a class="md-icon-button osx-control close" md-no-ink ng-click="shell.closeApp()">
         <svg x="0px" y="0px" viewBox="0 0 6.4 6.4">
@@ -46,6 +47,7 @@
         </svg>
       </a>
     </div>
+    -->
     <div class="md-toolbar-tools">
       <span ui-view="header"></span>
       <span class="draggable" flex></span>
@@ -59,7 +61,7 @@
       <span></span>
     </div>
   </md-toolbar>
-  <md-content flex layout-fill layout-margin ui-view="module"></md-content>
+  <md-content flex layout-fill ui-view="module"></md-content>
   <div layout="row" layout-align="end start" layout-margin>
     <div layout-fill layout-padding ui-view="status"></div>
     <span flex></span>

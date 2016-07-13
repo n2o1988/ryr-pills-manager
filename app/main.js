@@ -37,14 +37,15 @@
       }
     ]);
 
-  var PouchDBService = require('./shell/services/PouchDBService');
-  var ActivityDataService = require('./shell/services/ActivityDataService');
-  var ActivityService = require('./shell/services/ActivityService');
+  const PouchDBService = require('./shell/services/PouchDBService');
+  const ActivityDataService = require('./shell/services/ActivityDataService');
+  const ActivityService = require('./shell/services/ActivityService');
+  const NotificationsService = require('./shell/services/NotificationsService');
 
-  var LevelGraphService = require('./shell/services/LevelGraphService');
+  const LevelGraphService = require('./shell/services/LevelGraphService');
 
-  var ModuleProvider = require('./scripts/ModuleProvider');
-  var ShellController = require('./shell/controllers/ShellController');
+  const ModuleProvider = require('./scripts/ModuleProvider');
+  const ShellController = require('./shell/controllers/ShellController');
 
   // hint: has to initialize modules here, otherwise controller objects are not found :(
   ModuleProvider.loadModules();
@@ -54,6 +55,7 @@
   angular.module('electron-app').service('PouchDBService', [PouchDBService]);
   angular.module('electron-app').service('ActivityDataService', ['PouchDBService', ActivityDataService]);
   angular.module('electron-app').service('ActivityService', ['ActivityDataService', ActivityService]);
+  angular.module('electron-app').service('NotificationsService', ['$mdToast', NotificationsService]);
 
   angular.module('electron-app').service('LevelGraphService', [LevelGraphService]);
 

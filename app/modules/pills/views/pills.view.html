@@ -1,0 +1,107 @@
+<!-- Loading view -->
+<div layout-padding ng-if="!$ctrl.dictionary">
+  <div flex layout-fill layout="column" ng-cloak>
+    <p>Select dictionary environment: <span class="radioValue">{{ data.group1 }}</span> </p>
+    <md-radio-group ng-model="$ctrl.selectedEnv">
+      <md-radio-button ng-repeat="env in $ctrl.environments" ng-value="env" class="md-primary">{{env.name}}</md-radio-button>
+    </md-radio-group>
+  </div>
+
+  <!-- actions -->
+  <div layout="row" layout-align="end start" layout-margin>
+      <md-button class="md-fab md-fab-bottom-right md-scale" aria-label="Load"
+        ng-disabled="!$ctrl.selectedEnv" ng-click="$ctrl.load()">
+        <md-tooltip md-direction="left">Load dictionary</md-tooltip>
+        <md-icon>get_app</md-icon>
+      </md-button>
+  </div>
+</div>
+
+
+<!-- Dictionary view -->
+<div ng-if="$ctrl.dictionary" layout="row">
+
+  <!-- Keys List -->
+  <div flex="30">
+    <md-toolbar layout="column" class="md-hue-2">
+      <div class="md-toolbar-tools">
+        <span>Navitaire Keys</span>
+      </div>
+      <div class="md-toolbar-tools searchbox">
+        <md-input-container md-no-float class="md-block">
+          <md-icon class="search-icon">search</md-icon>
+          <input ng-model="$ctrl.filterKeys" type="text" placeholder="Search...">
+        </md-input-container>
+        <md-checkbox ng-model="$ctrl.incompleteOnly" aria-label="Hide done">
+          Hide complete
+        </md-checkbox>
+      </div>
+    </md-toolbar>
+    <md-content full-height scroll-to-element="entry{{$ctrl.selectedKey.keyPart}}">
+      <md-list flex>
+        <md-list-item class="md-3-line" ng-class="{'selected': $ctrl.selectedKey === entry, 'done': entry.done}"
+            id="entry{{::entry.keyPart}}" ng-if="!$ctrl.incompleteOnly || !entry.done"
+            ng-repeat="entry in $ctrl.dictionary.flatten | filter:{'keyPart': $ctrl.filterKeys}" ng-click="$ctrl.selectKey(entry)">
+
+          <div class="md-list-item-text" layout="column">
+            <h3>
+              <md-icon>{{entry.done ? 'check_box' : 'check_box_outline_blank'}}</md-icon>
+              {{ entry.keyPart }}
+            </h3>
+            <h4 class="key-subheading">{{ entry.title }}</h4>
+          </div>
+        </md-list-item>
+      </md-list>
+    </md-content>
+  </div>
+
+  <!-- Form -->
+  <div flex layout-padding layout-align="center center" ng-if="!$ctrl.selectedKey" layout="column">
+    <div class="md-headline">
+      <md-icon>warning</md-icon>
+      Please select the key from the left panel
+    </div>
+  </div>
+  <div flex layout="column" ng-if="::$ctrl.selectedKey" layout-padding>
+    <!-- Provider -->
+
+      <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">
+              {{$ctrl.dictionary.hierarchical.navitaire.parking.provider.name[$ctrl.selectedKey.providerCode]}}
+            </span>
+            <span class="md-subhead">
+              Sub
+            </span>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-lg card-media">
+              <img class="provider-logo" ng-if="$ctrl.selectedKey.logo" ng-src="{{$ctrl.selectedKey.logo}}" />
+            </div>
+          </md-card-title-media>
+        </md-card-title>
+      </md-card>
+
+
+  </div>
+
+
+
+  <!-- actions -->
+  <div layout="row" layout-align="end start" layout-margin>
+    <div class="actions-bottom-right">
+      <md-button class="md-fab  md-scale" aria-label="Next"
+                 ng-click="$ctrl.prevKey()" ng-disabled="$ctrl.isPrevDisabled()">
+        <md-tooltip md-direction="left">Prev key</md-tooltip>
+        <md-icon>arrow_back</md-icon>
+      </md-button>
+
+      <md-button class="md-fab md-scale" aria-label="Next"
+                 ng-click="$ctrl.nextKey()" ng-disabled="$ctrl.isNextDisabled()">
+        <md-tooltip md-direction="left">Next key</md-tooltip>
+        <md-icon>arrow_forward</md-icon>
+      </md-button>
+    </div>
+  </div>
+</div>

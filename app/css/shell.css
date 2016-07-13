@@ -6,13 +6,15 @@ html, body {
   overflow: hidden;
   -webkit-user-select: none;
 }
+.padded {
+  padding: 25px;
+}
 md-content[ui-view='content'], md-content[ui-view='module'] {
   height: 85vh;
   width: 99vw;
   overflow: hidden;
 }
 md-content[ui-view='content'] {
-  padding: 20px;
   height: 100%;
   width: 100%;
   overflow-y: auto;
@@ -57,4 +59,40 @@ md-content[ui-view='content'] {
 md-fab-speed-dial.md-scale.md-is-open .md-fab-action-item {
   -webkit-transform: scale(1);
           transform: scale(1);
+}
+
+md-list-item.selected {
+  background-color: #E3F2FD;
+}
+md-list-item.done {
+  background-color: #DCEDC8;
+}
+.searchbox md-input-container.md-has-icon {
+  padding-left: 26px;
+}
+.searchbox .search-icon {
+  font-size: 18px;
+}
+.searchbox input{
+  color: white;
+  font-size: 15px;
+  height: 25px;
+}
+.searchbox.md-toolbar-tools {
+  font-size: 15px;
+}
+md-list-item.md-3-line>.md-no-style .md-list-item-text h4.key-subheading {
+  white-space: normal;
+}
+
+.actions-bottom-right {
+  top: auto;
+  right: 20px;
+  bottom: 20px;
+  left: auto;
+  position: absolute;
+}
+.provider-logo {
+  margin-left: 20px;
+  max-height: 40px;
 }

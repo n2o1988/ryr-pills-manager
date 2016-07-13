@@ -15,6 +15,7 @@ based on elelctron-boilerplate
 * install Python 2.7 from [here](http://www.python.org) and add the installation directory to your system path variable
 * For Windows, install Windows SDK for Windows Server 2008 and .NET Framework 3.5 from [here](http://www.microsoft.com/en-us/download/details.aspx?id=11310)
 * For Windows, install Visual Studio 2013/2015 (Express for Desktop is sufficient).
+* For Windows, if you installed Visual Studio 2015 make sure to run the following command: npm config -g set msvs_version 2015
 * clone git repository (```git clone -b angularjs https://github.com/appelgriebsch/electron-boilerplate.git ./myproject```)
 * open terminal and run ```npm install``` to install dependencies
 * start application in debug by executing ```npm start``` in terminal
