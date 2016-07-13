@@ -1,5 +1,5 @@
-# har-api-debugger
-A tool to help debugging API-based applications by using a .har archive from a front-end session,
+# ryr-pills-manager
+A tool to help content team to maintain pills in the Parking drawer
 based on elelctron-boilerplate
 
 ## Included modules

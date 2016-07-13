@@ -1,32 +1,32 @@
 {
-  "name": "har-api-debugger",
-  "productName": "Har Api Debugger",
-  "description": "A tool to help debugging API-based applications by using a .har archive from a front-end session",
+  "name": "ryr-pills-manager",
+  "productName": "Ryanair Pills Manager",
+  "description": "A tool to help content team to maintain pills in the Parking drawer",
   "version": "0.1.0",
   "author": "Lamberto Fichera <fichera.lamberto@gmail.com>",
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/n2o1988/har-api-debugger.git"
+    "url": "git+https://github.com/n2o1988/ryr-pills-manager.git"
   },
   "keywords": [
-    "har",
+    "pills",
     "electron",
     "debugger",
     "api",
     "angularjs"
   ],
   "config": {
-    "id": "com.lworks.har-api-debbuger",
+    "id": "com.lworks.ryr-pills-manager",
     "ico": "assets/boilerplate.ico",
     "icns": "assets/boilerplate.icns",
     "png": "assets/boilerplate.png"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/n2o1988/har-api-debugger/issues"
+    "url": "https://github.com/n2o1988/ryr-pills-manager/issues"
   },
-  "homepage": "https://github.com/n2o1988/har-api-debugger#readme",
+  "homepage": "https://github.com/n2o1988/ryr-pills-manager#readme",
   "scripts": {
     "postinstall": "npm run app-install && npm run electron-version && npm run rebuild",
     "start": "electron app/",
