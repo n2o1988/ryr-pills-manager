@@ -62,29 +62,37 @@
       Please select the key from the left panel
     </div>
   </div>
-  <div flex layout="column" ng-if="::$ctrl.selectedKey" layout-padding>
+  <md-content flex layout="column" ng-if="::$ctrl.selectedKey" layout-padding full-height>
     <!-- Provider -->
+    <md-card>
+      <img class="provider-logo" ng-if="$ctrl.selectedKey.logo" ng-src="{{$ctrl.selectedKey.logo}}" />
+      <md-card-title>
+        <md-card-title-text>
+          <span class="md-headline">{{$ctrl.dictionary.hierarchical.navitaire.parking.provider.name[$ctrl.selectedKey.providerCode]}}</span>
+          <span class="md-subhead">{{$ctrl.selectedKey.title}}</span>
+        </md-card-title-text>
+      </md-card-title>
+      <md-card-content>
+        <p class="current-key-value" ng-bind-html="$ctrl.selectedKey.value"></p>
+      </md-card-content>
+      <!--<md-card-actions layout="row" layout-align="end center">-->
+        <!--<md-button>Action 1</md-button>-->
+        <!--<md-button>Action 2</md-button>-->
+      <!--</md-card-actions>-->
+    </md-card>
 
-      <md-card>
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">
-              {{$ctrl.dictionary.hierarchical.navitaire.parking.provider.name[$ctrl.selectedKey.providerCode]}}
-            </span>
-            <span class="md-subhead">
-              Sub
-            </span>
-          </md-card-title-text>
-          <md-card-title-media>
-            <div class="md-media-lg card-media">
-              <img class="provider-logo" ng-if="$ctrl.selectedKey.logo" ng-src="{{$ctrl.selectedKey.logo}}" />
-            </div>
-          </md-card-title-media>
-        </md-card-title>
-      </md-card>
-
-
-  </div>
+    <!-- Pills -->
+    <md-card>
+      <md-card-title>
+        <md-card-title-text>
+          <span class="md-title">List items / Pills</span>
+        </md-card-title-text>
+      </md-card-title>
+      <md-card-content>
+        <pre>{{$ctrl.selectedKey | json}}</pre>
+      </md-card-content>
+    </md-card>
+  </md-content>
 
 
 

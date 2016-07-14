@@ -90,9 +90,16 @@ md-list-item.md-3-line>.md-no-style .md-list-item-text h4.key-subheading {
   right: 20px;
   bottom: 20px;
   left: auto;
-  position: absolute;
+  position: fixed;
 }
 .provider-logo {
-  margin-left: 20px;
-  max-height: 40px;
+  position: absolute;
+  width: 150px;
+  right: 30px;
+  top: 40px;
+}
+.current-key-value h1,
+.current-key-value a,
+.current-key-value ul{
+  display: none;
 }

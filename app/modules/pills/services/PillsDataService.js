@@ -24,9 +24,15 @@
           locationCode = 'DUB';
       }
 
+      // list items
+      const listItems = Array.from(element.getElementsByTagName('li') || []).map(item => ({
+        value: item.innerHTML,
+        isPill: item.classList.contains('pill'),
+        pillIcon: item.getAttribute('pill-icon')
+      }));
 
       return Object.assign(entry, {
-        title: element.getElementsByTagName('h1')[0].innerText,
+        title: (element.getElementsByTagName('h1')[0] || {}).innerText,
         providerCode,
         locationCode,
         logo: providerCode && locationCode ?

@@ -20,7 +20,6 @@
 
     this.selectKey = (entry) => {
       this.selectedKey = entry;
-      entry.done = true;
     };
 
     this.isPrevDisabled = () => !this.selectedKey || this.dictionary.flatten.indexOf(this.selectedKey) === 0;
