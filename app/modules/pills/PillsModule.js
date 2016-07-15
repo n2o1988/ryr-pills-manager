@@ -21,8 +21,23 @@
               }
             }
           })
+          .state(`${moduleConfig.state}.environments`, {
+            url: '/environments',
+            params: {
+              selectedEnv: null
+            },
+            views: {
+              'content': {
+                templateUrl: `${moduleConfig.path}/views/pills.environments.html`,
+                controller: 'PillsEnvironmentsController as $ctrl'
+              }
+            }
+          })
           .state(`${moduleConfig.state}.view`, {
             url: '/view',
+            params: {
+              selectedEnv: null
+            },
             views: {
               'content': {
                 templateUrl: `${moduleConfig.path}/views/pills.view.html`,
@@ -31,20 +46,41 @@
               //'actions@app': {
               //  templateUrl: `${moduleConfig.path}/views/pills.actions.html`
               //}
+            },
+            resolve: {
+              dictionary: ['$stateParams', 'PillsDataService', 'NotificationsService', '$state',
+                function ($stateParams, PillsDataService, NotificationsService, $state) {
+                if ($stateParams.selectedEnv) {
+                  return PillsDataService.loadFromHttp($stateParams.selectedEnv).catch(error => {
+                    console.error('error: ', error);
+                    NotificationsService.error('Cannot load the dictionary');
+                    $state.go(`${moduleConfig.state}.environments`);
+                  });
+                }
+                return null;
+              }]
+            },
+            onEnter($state, $stateParams) {
+              if (!$stateParams.selectedEnv) {
+                $state.go(`${moduleConfig.state}.environments`);
+              }
             }
           });
       });
 
     var PillsDataService = require('./services/PillsDataService');
     var PillsViewController = require('./controllers/PillsViewController');
+    var PillsEnvironmentsController = require('./controllers/PillsEnvironmentsController');
 
     angular.module('electron-app').service('PillsDataService', ['PouchDBService', '$http', PillsDataService]);
-    angular.module('electron-app').controller('PillsViewController', ['$scope', '$state', '$q', '$mdDialog',
-      'PillsDataService', 'NotificationsService', PillsViewController]);
+    angular.module('electron-app').controller('PillsEnvironmentsController', ['$state', '$stateParams', 'PillsDataService',
+      PillsEnvironmentsController]);
+    angular.module('electron-app').controller('PillsViewController', PillsViewController);
 
     // directives
     require('./directives/full-height.js');
     require('./directives/scroll-to-element.js');
+    require('./directives/loading-button.js');
   }
 
   module.exports = PillsModule;

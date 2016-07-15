@@ -61,11 +61,12 @@ md-fab-speed-dial.md-scale.md-is-open .md-fab-action-item {
           transform: scale(1);
 }
 
-md-list-item.selected {
-  background-color: #E3F2FD;
-}
+
 md-list-item.done {
   background-color: #DCEDC8;
+}
+md-list-item.selected {
+  background-color: #E3F2FD;
 }
 .searchbox md-input-container.md-has-icon {
   padding-left: 26px;
@@ -102,4 +103,13 @@ md-list-item.md-3-line>.md-no-style .md-list-item-text h4.key-subheading {
 .current-key-value a,
 .current-key-value ul{
   display: none;
+}
+.centered {
+  text-align: center;
+}
+.card-pill-icons .md-icon-button {
+  padding: 0;
+}
+.material-icons.md-inactive {
+  opacity: .4;
 }

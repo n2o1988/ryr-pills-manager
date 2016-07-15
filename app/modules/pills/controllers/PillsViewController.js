@@ -2,24 +2,16 @@
 
   'use strict';
 
-  function PillsViewController($scope, $state, $q, $mdDialog, PillsDataService, NotificationsService) {
-
-    this.environments = PillsDataService.environments;
-    this.selectedEnv = this.environments.find(env => env.name === 'LIVE');
-
-    this.load = () => {
-      PillsDataService.loadFromHttp(this.selectedEnv)
-        .then(result => {
-          this.dictionary = result;
-        })
-        .catch(error => {
-          console.error('error: ', error);
-          NotificationsService.error('Cannot load the dictionary');
-        });
-    };
+  function PillsViewController($scope, $stateParams, PillsDataService, NotificationsService, dictionary) {
+    // pill icons
+    this.PILLS = PillsDataService.relevantPillIcons;
+    this.dictionary = dictionary;
 
     this.selectKey = (entry) => {
       this.selectedKey = entry;
+    };
+    this.selectFirstUndone = () => {
+      this.selectKey(this.dictionary.flatten.find(entry => !entry.done));
     };
 
     this.isPrevDisabled = () => !this.selectedKey || this.dictionary.flatten.indexOf(this.selectedKey) === 0;
@@ -27,12 +19,43 @@
       this.dictionary.flatten.length - 1;
 
     this.prevKey = () => {
-      const currentIndex = this.dictionary.flatten.indexOf(this.selectedKey);
-      this.selectKey(this.dictionary.flatten[currentIndex - 1]);
+      if (!this.isPrevDisabled()) {
+        const currentIndex = this.dictionary.flatten.indexOf(this.selectedKey);
+        this.selectKey(this.dictionary.flatten[currentIndex - 1]);
+      }
     };
     this.nextKey = () => {
-      const currentIndex = this.dictionary.flatten.indexOf(this.selectedKey);
-      this.selectKey(this.dictionary.flatten[currentIndex + 1]);
+      if (!this.isNextDisabled()) {
+        const currentIndex = this.dictionary.flatten.indexOf(this.selectedKey);
+        this.selectKey(this.dictionary.flatten[currentIndex + 1]);
+      }
+    };
+
+    this.getPill = (entry, pillIcon) => ((entry.listItems || []).find(item => item.pillIcon === pillIcon) || {}).text;
+
+    this.showAlert = (title, msg) => {
+      NotificationsService.dialog(title, msg);
+    };
+
+    this.assignPillIcon = (listItem, pillIcon) => {
+      listItem.isPill = true;
+      listItem.pillIcon = pillIcon;
+      this.onPillStatusChanged(listItem);
+    };
+
+    this.onPillStatusChanged = (listItem) => {
+      this.selectedKey.done = PillsDataService.isEntryDone(this.selectedKey.listItems);
+      if (!listItem.isPill) {
+        listItem.pillIcon = null;
+      }
+    };
+
+    this.doneOverride = (entry) => {
+      const msg = 'Not all the pills have been set up for this key. Do you really want to set it as "done"?';
+      NotificationsService.confirm('Confirm operation', msg)
+      .then(() => {
+        entry.done = true;
+      });
     };
   }
 

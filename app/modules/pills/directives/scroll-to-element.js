@@ -5,7 +5,7 @@
     return {
       restrict: 'A',
       link(scope, element, attrs) {
-        const entryOffsets = 184;
+        const entryOffsets = 220;
 
         attrs.$observe('scrollToElement', (val) => {
           if (val) {

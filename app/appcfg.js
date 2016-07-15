@@ -6,11 +6,11 @@
       pills: {
         path: 'modules/pills',
         name: 'PillsModule',
-        url: '/app/pills/view',
+        url: '/app/pills/environments',
         state: 'app.pills',
         label: 'Pills',
-        tooltip: 'Change your pills',
-        icon: 'toc'
+        tooltip: 'Back to the environments',
+        icon: 'arrow_back'
       }
     }
   };

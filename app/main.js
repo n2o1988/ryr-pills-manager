@@ -7,7 +7,9 @@
     .config(function($mdThemingProvider) {
       $mdThemingProvider.theme('default')
         .primaryPalette('blue')
-        .accentPalette('grey');
+        .accentPalette('green', {
+          'default': '600'
+        });
     })
     .config(function($stateProvider, $urlRouterProvider) {
 
@@ -55,7 +57,7 @@
   angular.module('electron-app').service('PouchDBService', [PouchDBService]);
   angular.module('electron-app').service('ActivityDataService', ['PouchDBService', ActivityDataService]);
   angular.module('electron-app').service('ActivityService', ['ActivityDataService', ActivityService]);
-  angular.module('electron-app').service('NotificationsService', ['$mdToast', NotificationsService]);
+  angular.module('electron-app').service('NotificationsService', ['$mdToast', '$mdDialog', NotificationsService]);
 
   angular.module('electron-app').service('LevelGraphService', [LevelGraphService]);
 
