@@ -1,20 +1,21 @@
 (function(angular) {
-
+//TODO: remove if unused
   angular.module('electron-app')
   .directive('fullHeight', function fullHeight($window, $timeout) {
     return {
       restrict: 'A',
-      link(scope, element) {
+      link(scope, element, attrs) {
          //main-toolbar
         let timer;
         const debouncedOnResize = () => {
           $timeout.cancel(timer);
           timer = $timeout(onResize, 200, false);
         };
+        const offset = attrs.fullHeightOffset ? parseInt(attrs.fullHeightOffset) || 0 : 0;
 
         const onResize = () => {
           const top = element[0].getBoundingClientRect().top;
-          const height = window.innerHeight - top - 50;
+          const height = window.innerHeight - top - offset;
           element.css('max-height', `${height}px`);
         };
 

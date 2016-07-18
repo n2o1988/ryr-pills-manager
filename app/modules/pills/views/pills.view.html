@@ -1,27 +1,34 @@
-<!-- Dictionary view -->
-<div layout="row">
-
-  <!-- Keys List -->
-  <div flex="30">
-    <md-toolbar layout="column" class="md-hue-2">
-      <div class="md-toolbar-tools">
-        <span>Navitaire Keys</span>
-      </div>
-      <div class="md-toolbar-tools searchbox">
-        <md-input-container md-no-float class="md-block">
+<md-content layout="row" flex>
+  <div layout="column">
+    <md-sidenav
+    layout="column"
+    class="md-sidenav-left"
+    md-component-id="left-sidenav"
+    md-is-locked-open="$mdMedia('gt-sm')"
+    md-disable-backdrop
+    md-whiteframe="4">
+    <md-toolbar class="md-theme-indigo">
+      <h1 class="md-toolbar-tools">Navitaire Keys</h1>
+    </md-toolbar>
+    <md-content scroll-to-element="entry{{$ctrl.selectedKey.keyPart}}">
+      <div layout="row" class="searchbox" layout-padding>
+        <!-- Filtering -->
+        <md-input-container md-no-float>
           <md-icon class="search-icon">search</md-icon>
           <input ng-model="$ctrl.filterKeys" type="text" placeholder="Search...">
         </md-input-container>
-        <md-checkbox ng-model="$ctrl.incompleteOnly" aria-label="Hide done">
-          Hide complete
-        </md-checkbox>
+        <md-input-container>
+          <md-checkbox class="md-primary" ng-model="$ctrl.incompleteOnly" aria-label="Hide done">
+            Hide complete
+          </md-checkbox>
+        </md-input-container>
       </div>
-    </md-toolbar>
-    <md-content full-height scroll-to-element="entry{{$ctrl.selectedKey.keyPart}}">
+
+      <!-- Keys -->
       <md-list flex>
         <md-list-item class="md-3-line" ng-class="{'selected': $ctrl.selectedKey === entry, 'done': entry.done}"
-            id="entry{{::entry.keyPart}}" ng-if="!$ctrl.incompleteOnly || !entry.done"
-            ng-repeat="entry in $ctrl.dictionary.flatten | filter:{'keyPart': $ctrl.filterKeys}" ng-click="$ctrl.selectKey(entry)">
+          id="entry{{::entry.keyPart}}" ng-if="!$ctrl.incompleteOnly || !entry.done"
+          ng-repeat="entry in $ctrl.dictionary.flatten | filter:{'keyPart': $ctrl.filterKeys}" ng-click="$ctrl.selectKey(entry)">
 
           <div class="md-list-item-text" layout="column">
             <h3>
@@ -33,102 +40,168 @@
         </md-list-item>
       </md-list>
     </md-content>
+  </md-sidenav>
   </div>
 
-  <!-- Form -->
-  <div flex layout-padding layout-align="center center" ng-if="!$ctrl.selectedKey" layout="column">
-    <div class="md-headline">
-      <md-icon>warning</md-icon>
-      Please select the key from the left panel
-      <p class="centered">
-        <md-button ng-click="$ctrl.selectFirstUndone()">or go to the first incomplete key <md-icon>navigate_next</md-icon></md-button>
-      </p>
-    </div>
-  </div>
-  <md-content flex layout="column" ng-if="::$ctrl.selectedKey" layout-padding full-height>
-    <!-- Provider -->
-    <md-card>
-      <img class="provider-logo" ng-if="$ctrl.selectedKey.logo" ng-src="{{$ctrl.selectedKey.logo}}" />
-      <md-card-title>
-        <md-card-title-text>
-          <span class="md-headline">{{$ctrl.dictionary.hierarchical.navitaire.parking.provider.name[$ctrl.selectedKey.providerCode]}}</span>
-          <span class="md-subhead">{{$ctrl.selectedKey.title}}</span>
-          <span class="md-subhead">{{$ctrl.selectedKey.key}}</span>
-        </md-card-title-text>
-      </md-card-title>
-      <md-card-content>
-      </md-card-content>
-      <md-card-actions layout="row" layout-align="end center">
-        <md-button class="md-icon-button" ng-if="$ctrl.selectedKey.done">
-          <md-tooltip md-direction="top">All pills have been set up</md-tooltip>
-          <md-icon class="md-accent">check</md-icon>
-        </md-button>
-        <md-button class="md-icon-button" ng-if="!$ctrl.selectedKey.done" ng-click="$ctrl.doneOverride($ctrl.selectedKey)">
-          <md-tooltip md-direction="top">Not all the pills have been set up</md-tooltip>
-          <md-icon class="md-warn">error_outline</md-icon>
-        </md-button>
+  <div layout="column" flex id="content">
+    <md-button class="md-icon-button" ng-click="$ctrl.toggleSidenav()" hide-gt-sm>
+      <md-tooltip md-direction="right">Show navitaire keys</md-tooltip>
+      <md-icon>menu</md-icon>
+    </md-button>
+    <!-- Body -->
+    <md-content layout="column" flex class="md-padding has-footer">
+      <!-- Key not selected -->
+      <div flex layout-padding layout-align="center center" ng-if="!$ctrl.selectedKey" layout="column">
+        <div class="md-headline">
+          <md-icon>warning</md-icon>
+          Please select the key from the left panel
+          <p class="centered">
+            <md-button ng-click="$ctrl.selectFirstUndone()">or go to the first incomplete key <md-icon>navigate_next</md-icon></md-button>
+          </p>
+        </div>
+      </div>
 
-        <!-- pills -->
-        <md-button class="md-fab md-mini" ng-repeat="(pillKey, pillObj) in ::$ctrl.PILLS"
-           ng-disabled="!$ctrl.getPill($ctrl.selectedKey, pillObj.val)"
-           ng-click="$ctrl.showAlert(pillObj.label, $ctrl.getPill($ctrl.selectedKey, pillObj.val))">
-          <md-icon>{{::pillObj.materialVal}}</md-icon>
-        </md-button>
 
-      </md-card-actions>
-    </md-card>
+      <!-- Key selected -->
+      <div ng-if="::$ctrl.selectedKey">
+        <!-- Provider -->
+        <md-card>
+          <img class="provider-logo" ng-if="$ctrl.selectedKey.logo" ng-src="{{$ctrl.selectedKey.logo}}" />
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">{{$ctrl.dictionary.hierarchical.navitaire.parking.provider.name[$ctrl.selectedKey.providerCode]}}</span>
+              <span class="md-subhead">{{$ctrl.selectedKey.title}}</span>
+              <span class="md-subhead">{{$ctrl.selectedKey.key}}</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+          </md-card-content>
+          <md-card-actions layout="row" layout-align="end center">
+            <md-button class="md-icon-button" ng-if="$ctrl.selectedKey.done">
+              <md-tooltip md-direction="top">All pills have been set up</md-tooltip>
+              <md-icon class="md-accent">check</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-if="!$ctrl.selectedKey.done" ng-click="$ctrl.doneOverride($ctrl.selectedKey)">
+              <md-tooltip md-direction="top">Not all the pills have been set up</md-tooltip>
+              <md-icon class="md-warn">error_outline</md-icon>
+            </md-button>
 
-    <!-- Pills -->
-    <md-card>
-      <md-card-title>
-        <md-card-title-text>
-          <span class="md-title">List items / Pills</span>
-        </md-card-title-text>
-      </md-card-title>
-      <md-card-content>
-          <div class="card-list-items" ng-repeat="listItem in $ctrl.selectedKey.listItems" layout="row">
+            <!-- pills -->
+            <md-button class="md-fab md-mini" ng-repeat="(pillKey, pillObj) in ::$ctrl.PILLS"
+                       ng-disabled="!$ctrl.getPill($ctrl.selectedKey, pillObj.val)"
+                       ng-click="$ctrl.showAlert(pillObj.label, $ctrl.getPill($ctrl.selectedKey, pillObj.val))">
+              <md-icon>{{::pillObj.materialVal}}</md-icon>
+            </md-button>
 
-            <md-input-container flex="70">
-              <label>Item description</label>
-              <input type="text" ng-model="listItem.text" required>
-            </md-input-container>
+          </md-card-actions>
+        </md-card>
 
-            <md-input-container flex>
-              <md-checkbox class="md-primary" ng-model="listItem.isPill" aria-label="Pill" ng-change="$ctrl.onPillStatusChanged(listItem)">
-                <span>Pill</span>
-              </md-checkbox>
-            </md-input-container>
+        <!-- Pills -->
+        <md-card class="has-action-button">
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-title">List items / Pills</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content flex="column">
+            <div class="card-list-items" ng-repeat="listItem in $ctrl.selectedKey.listItems" layout="row"
+                 ng-switch on="listItem.editMode">
 
-            <div flex layout="row" layout-padding class="card-pill-icons">
-              <md-button class="md-icon-button" ng-repeat="(pillKey, pillObj) in ::$ctrl.PILLS" ng-click="$ctrl.assignPillIcon(listItem, pillObj.val)">
-                <md-tooltip md-direction="top">Make this a "{{::pillObj.label}}" pill</md-tooltip>
-                <md-icon ng-class="{'md-primary': listItem.pillIcon === pillObj.val, 'md-inactive': listItem.pillIcon !== pillObj.val}">{{::pillObj.materialVal}}</md-icon>
+              <md-input-container flex ng-switch-when="true" class="has-input-icon" md-no-float>
+                <input type="text" ng-model="listItem.text" required placeholder="Item description">
+                <md-button class="md-icon-button input-icon" ng-click="$ctrl.restoreListItemText(listItem)">
+                  <md-tooltip>Restore original text</md-tooltip>
+                  <md-icon>undo</md-icon>
+                </md-button>
+              </md-input-container>
+
+              <div flex ng-switch-default>
+                <md-button ng-click="$ctrl.setEditMode(listItem, true)" class="no-transform" ng-class="{'md-primary': listItem.isPill}">
+                  <md-tooltip md-direction="top">Click to edit</md-tooltip>
+                  <md-icon>edit</md-icon>
+                  {{listItem.text}}
+                </md-button>
+              </div>
+
+              <div flex="20" layout="row" layout-padding class="card-pill-icons">
+                <md-button class="md-icon-button" ng-repeat="(pillKey, pillObj) in ::$ctrl.PILLS" ng-click="$ctrl.assignPillIcon(listItem, pillObj.val)">
+                  <md-tooltip md-direction="top">Make this a "{{::pillObj.label}}" pill</md-tooltip>
+                  <md-icon ng-class="{'md-primary': listItem.pillIcon === pillObj.val, 'md-inactive': listItem.pillIcon !== pillObj.val}">{{::pillObj.materialVal}}</md-icon>
+                </md-button>
+              </div>
+
+              <div flex="10" layout-padding>
+                <md-button class="md-icon-button" ng-click="$ctrl.removeListItem($ctrl.selectedKey, listItem)">
+                  <md-tooltip md-direction="top">Remove this entry</md-tooltip>
+                  <md-icon class="md-warn">delete</md-icon>
+                </md-button>
+              </div>
+
+            </div>
+
+            <div class="md-subheading" ng-if="!$ctrl.selectedKey.listItems.length">
+              <md-button class="md-warn" ng-click="$ctrl.addListItem($ctrl.selectedKey)">
+                <md-icon>warning</md-icon>
+                No items to display. Click here to create one
               </md-button>
             </div>
 
-          </div>
+            <md-button class="md-fab md-fab-bottom-right md-mini md-primary md-hue-2" aria-label="Add more items"
+                       ng-click="$ctrl.addListItem($ctrl.selectedKey)">
+              <md-tooltip md-direction="left">Add more pills</md-tooltip>
+              <md-icon>playlist_add</md-icon>
+            </md-button>
 
-      </md-card-content>
-    </md-card>
-  </md-content>
+          </md-card-content>
+        </md-card>
+      </div>
+    </md-content>
+  </div>
+</md-content>
 
+<!-- actions -->
+<div layout="row" layout-align="end start" layout-margin>
+  <div class="actions-bottom-right has-fab-speed-dial">
+    <md-button class="md-fab  md-scale md-primary" aria-label="Prev"
+               ng-click="$ctrl.prevKey()" ng-disabled="$ctrl.isPrevDisabled()">
+      <md-tooltip md-direction="left">Prev key</md-tooltip>
+      <md-icon>arrow_back</md-icon>
+    </md-button>
 
+    <md-button class="md-fab md-scale" aria-label="Next" ng-class="{'md-primary': !$ctrl.selectedKey.done, 'md-accent': $ctrl.selectedKey.done}"
+               ng-click="$ctrl.nextKey()" ng-disabled="$ctrl.isNextDisabled()">
+      <md-tooltip md-direction="top">Next key</md-tooltip>
+      <md-icon>arrow_forward</md-icon>
+    </md-button>
 
-  <!-- actions -->
-  <div layout="row" layout-align="end start" layout-margin>
-    <div class="actions-bottom-right">
-      <md-button class="md-fab  md-scale md-primary" aria-label="Next"
-                 ng-click="$ctrl.prevKey()" ng-disabled="$ctrl.isPrevDisabled()">
-        <md-tooltip md-direction="left">Prev key</md-tooltip>
-        <md-icon>arrow_back</md-icon>
-      </md-button>
+    <!--<md-button class="md-fab md-scale md-accent" aria-label="Save"-->
+         <!--ng-click="$ctrl.save()" ng-disabled="$ctrl.isSaveDisabled()">-->
+      <!--<md-tooltip md-direction="top">Save</md-tooltip>-->
+      <!--<md-icon>arrow_forward</md-icon>-->
+    <!--</md-button>-->
 
-      <md-button class="md-fab md-scale" aria-label="Next" ng-class="{'md-primary': !$ctrl.selectedKey.done, 'md-accent': $ctrl.selectedKey.done}"
-                 ng-click="$ctrl.nextKey()" ng-disabled="$ctrl.isNextDisabled()">
-        <md-tooltip md-direction="top">Next key</md-tooltip>
-        <md-icon>arrow_forward</md-icon>
-      </md-button>
+    <md-fab-speed-dial md-open="$ctrl.saveMenuOpen" md-direction="up"
+                       class="md-scale">
+      <md-fab-trigger>
+        <md-button aria-label="menu" class="md-fab md-warn">
+          <md-icon>save</md-icon>
+        </md-button>
+      </md-fab-trigger>
+      <md-fab-actions>
 
-    </div>
+        <md-button aria-label="Text" class="md-fab md-raised md-mini">
+          <md-tooltip md-direction="left">Show html value for this key</md-tooltip>
+          <md-icon>code</md-icon>
+        </md-button>
+        <md-button aria-label="Download" class="md-fab md-raised md-mini">
+          <md-tooltip md-direction="left">Export XLIFF for this file</md-tooltip>
+          <md-icon>file_download</md-icon>
+        </md-button>
+        <md-button aria-label="Download all" class="md-fab md-raised md-mini md-accent">
+          <md-tooltip md-direction="left">Export XLIFF for the whole dictionary</md-tooltip>
+          <md-icon>playlist_add_check</md-icon>
+        </md-button>
+      </md-fab-actions>
+    </md-fab-speed-dial>
   </div>
 </div>

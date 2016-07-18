@@ -43,6 +43,9 @@
                 templateUrl: `${moduleConfig.path}/views/pills.view.html`,
                 controller: 'PillsViewController as $ctrl'
               },
+              'header@app': {
+                template: `${moduleConfig.label} - {{$stateParams.selectedEnv.name}}`
+              }
               //'actions@app': {
               //  templateUrl: `${moduleConfig.path}/views/pills.actions.html`
               //}

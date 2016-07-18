@@ -5,7 +5,7 @@
     return {
       restrict: 'A',
       link(scope, element, attrs) {
-        const entryOffsets = 220;
+        const tolerance = attrs.scrollTolerance ? parseInt(attrs.scrollTolerance) || 0 : 0;
 
         attrs.$observe('scrollToElement', (val) => {
           if (val) {
@@ -13,19 +13,19 @@
             if (entry) {
               // check if visible
 
-              // bottom
               const entryBoundingRect = entry.getBoundingClientRect();
-              const containerScrollTop = element[0].scrollTop;
-              const entryTop = entryBoundingRect.top + containerScrollTop - entryOffsets;
-              const entryBottom = entryBoundingRect.bottom + containerScrollTop - entryOffsets;
+              const containerBoundingRect = element[0].getBoundingClientRect();
+              const isTooHigh = entryBoundingRect.top + tolerance <= containerBoundingRect.top;
+              const isTooLow = entryBoundingRect.bottom - tolerance >= containerBoundingRect.bottom;
 
-              const containerTop = parseInt(element.css('max-height')) + containerScrollTop;
-              let isVisible = entryBottom <= containerTop && entryTop >= containerScrollTop;
-
+              let isVisible = !(isTooHigh || isTooLow);
 
               if (!isVisible) {
-                // auto scroll to fit it
-                element[0].scrollTop = entryTop;
+                if (isTooLow) {
+                  element[0].scrollTop += entryBoundingRect.bottom - containerBoundingRect.bottom;
+                } else {
+                  element[0].scrollTop += entryBoundingRect.top - containerBoundingRect.top;
+                }
               }
             }
           }

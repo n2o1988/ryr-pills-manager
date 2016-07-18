@@ -5,8 +5,13 @@
   angular.module('electron-app', ['ngMaterial', 'ngSanitize', 'ui.router', 'ngAnimate', 'angular-timeline',
     'angular-centered', 'ngMessages'])
     .config(function($mdThemingProvider) {
+      const palette = $mdThemingProvider.extendPalette('blue', {
+        //TODO customize
+      });
+      $mdThemingProvider.definePalette('ryanair', palette);
+
       $mdThemingProvider.theme('default')
-        .primaryPalette('blue')
+        .primaryPalette('ryanair')
         .accentPalette('green', {
           'default': '600'
         });

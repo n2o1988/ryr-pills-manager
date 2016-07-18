@@ -14,7 +14,7 @@
         this.$postLink = () => {
           const loader = $element[0].getElementsByClassName('loading-button-loader')[0];
           const button = $element[0].getElementsByClassName('md-button')[0];
-          if (button) {
+          if (button && button.classList.contains('md-fab-bottom-right')) {
             const buttonStyle = window.getComputedStyle(button);
             loader.style.position = 'absolute';
             loader.style.top = buttonStyle.top;

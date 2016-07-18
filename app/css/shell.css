@@ -10,8 +10,7 @@ html, body {
   padding: 25px;
 }
 md-content[ui-view='content'], md-content[ui-view='module'] {
-  height: 85vh;
-  width: 99vw;
+  height: 95vh;
   overflow: hidden;
 }
 md-content[ui-view='content'] {
@@ -71,17 +70,17 @@ md-list-item.selected {
 .searchbox md-input-container.md-has-icon {
   padding-left: 26px;
 }
+.searchbox {
+  font-size: 14px;
+}
 .searchbox .search-icon {
   font-size: 18px;
 }
 .searchbox input{
-  color: white;
   font-size: 15px;
   height: 25px;
 }
-.searchbox.md-toolbar-tools {
-  font-size: 15px;
-}
+
 md-list-item.md-3-line>.md-no-style .md-list-item-text h4.key-subheading {
   white-space: normal;
 }
@@ -89,10 +88,19 @@ md-list-item.md-3-line>.md-no-style .md-list-item-text h4.key-subheading {
 .actions-bottom-right {
   top: auto;
   right: 20px;
-  bottom: 20px;
+  bottom: 0;
   left: auto;
   position: fixed;
 }
+.actions-bottom-right.has-fab-speed-dial {
+  padding-right: 75px;
+}
+.actions-bottom-right md-fab-speed-dial {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
 .provider-logo {
   position: absolute;
   width: 150px;
@@ -112,4 +120,28 @@ md-list-item.md-3-line>.md-no-style .md-list-item-text h4.key-subheading {
 }
 .material-icons.md-inactive {
   opacity: .4;
+}
+.md-button.no-transform {
+  text-transform: none;
+}
+md-input-container.has-input-icon,
+md-input-container.has-input-icon.md-has-icon {
+  padding-left: 0;
+}
+md-input-container.has-input-icon input[type="text"] {
+  padding-right: 30px;
+}
+md-input-container.has-input-icon .input-icon {
+  position: absolute;
+  right: -10px;
+  top: -5px;
+}
+md-card.has-action-button {
+  position: relative;
+}
+md-card.has-action-button .md-button.md-fab.md-fab-bottom-right {
+  bottom: -15px;
+}
+md-content.has-footer {
+  margin-bottom: 100px;
 }

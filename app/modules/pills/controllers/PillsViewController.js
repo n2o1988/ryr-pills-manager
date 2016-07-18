@@ -2,10 +2,15 @@
 
   'use strict';
 
-  function PillsViewController($scope, $stateParams, PillsDataService, NotificationsService, dictionary) {
+  function PillsViewController($scope, $stateParams, PillsDataService, NotificationsService, $timeout, $mdSidenav,
+      dictionary) {
     // pill icons
     this.PILLS = PillsDataService.relevantPillIcons;
     this.dictionary = dictionary;
+
+    this.toggleSidenav = () => {
+      $mdSidenav('left-sidenav').toggle();
+    };
 
     this.selectKey = (entry) => {
       this.selectedKey = entry;
@@ -38,8 +43,12 @@
     };
 
     this.assignPillIcon = (listItem, pillIcon) => {
-      listItem.isPill = true;
-      listItem.pillIcon = pillIcon;
+      if (listItem.isPill && listItem.pillIcon === pillIcon) {
+        listItem.isPill = false;
+      } else {
+        listItem.isPill = true;
+        listItem.pillIcon = pillIcon;
+      }
       this.onPillStatusChanged(listItem);
     };
 
@@ -57,6 +66,65 @@
         entry.done = true;
       });
     };
+
+    this.setEditMode = (listItem, editMode = true) => {
+      if (!listItem._backupText && editMode && !listItem.editMode) {
+        listItem._backupText = listItem.text;
+      }
+
+      listItem.editMode = editMode;
+    };
+    this.restoreListItemText = (listItem) => {
+      if (listItem._backupText) {
+        listItem.text = listItem._backupText;
+      }
+      this.setEditMode(listItem, false);
+    };
+    this.addListItem = (entry) => {
+      if (!entry.listItems) {
+        entry.listItems = [];
+      }
+      entry.listItems.push({
+        text: '',
+        editMode: true
+      });
+    };
+    this.removeListItem = (entry, listItem) => {
+      NotificationsService.confirm('Confirm delete', 'Are you sure you want to delete this item?')
+      .then(() => {
+        entry.listItems.splice(entry.listItems.indexOf(listItem), 1);
+      });
+    };
+
+    // Export options
+    this.save = () => {
+      console.log('save');
+    };
+
+    let _keylistenerTimeout;
+    const handleWindowKeyPressed = (evt) => {
+
+      const targetTag = (evt.target || evt.srcElement).tagName.toUpperCase();
+      const targetsToSkip = ['INPUT', 'BUTTON', 'SELECT', 'MD-CHECKBOX'];
+      const keyCode = (evt.which || evt.keyCode).toString();
+      const handledKeys = {
+        37: this.prevKey,
+        38: this.prevKey,
+        39: this.nextKey,
+        40: this.nextKey
+      };
+
+      if (!~targetsToSkip.indexOf(targetTag) && !!~Object.keys(handledKeys).indexOf(keyCode)) {
+        $timeout.cancel(_keylistenerTimeout);
+        $timeout(() => {
+          handledKeys[keyCode]();
+        }, 100);
+      }
+    };
+    document.addEventListener('keydown', handleWindowKeyPressed);
+    $scope.$on('$destroy', () => {
+      document.removeEventListener('keydown', handleWindowKeyPressed);
+    });
   }
 
   module.exports = PillsViewController;
