@@ -92,12 +92,8 @@ md-list-item.md-3-line>.md-no-style .md-list-item-text h4.key-subheading {
   left: auto;
   position: fixed;
 }
-.actions-bottom-right.has-fab-speed-dial {
-  padding-right: 75px;
-}
-.actions-bottom-right md-fab-speed-dial {
-  position: absolute;
-  right: 0;
+.actions-bottom-right md-fab-speed-dial.md-fab-bottom-right {
+  right: 155px;
   bottom: 0;
 }
 
@@ -144,4 +140,8 @@ md-card.has-action-button .md-button.md-fab.md-fab-bottom-right {
 }
 md-content.has-footer {
   margin-bottom: 100px;
+}
+.md-dialog-content textarea {
+  width: 100%;
+  height: 150px;
 }

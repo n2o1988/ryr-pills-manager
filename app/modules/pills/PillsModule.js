@@ -71,14 +71,24 @@
           });
       });
 
+    angular.module('electron-app')
+      .run((NotificationsService) => {
+        NotificationsService.registerCustomDialog('pills-code-dialog', {
+          templateUrl: `${moduleConfig.path}/views/pills.code.dialog.html`,
+          controller: 'PillsCodeDialogController as $ctrl'
+        });
+      });
+
     var PillsDataService = require('./services/PillsDataService');
     var PillsViewController = require('./controllers/PillsViewController');
     var PillsEnvironmentsController = require('./controllers/PillsEnvironmentsController');
+    var PillsCodeDialogController = require('./controllers/PillsCodeDialogController');
 
     angular.module('electron-app').service('PillsDataService', ['PouchDBService', '$http', PillsDataService]);
     angular.module('electron-app').controller('PillsEnvironmentsController', ['$state', '$stateParams', 'PillsDataService',
       PillsEnvironmentsController]);
     angular.module('electron-app').controller('PillsViewController', PillsViewController);
+    angular.module('electron-app').controller('PillsCodeDialogController', PillsCodeDialogController);
 
     // directives
     require('./directives/full-height.js');

@@ -1,5 +1,4 @@
 (function(angular) {
-
   'use strict';
 
   function PillsViewController($scope, $stateParams, PillsDataService, NotificationsService, $timeout, $mdSidenav,
@@ -97,8 +96,23 @@
     };
 
     // Export options
-    this.save = () => {
-      console.log('save');
+    this.exportOptions = {
+      code: (entry) => {
+        NotificationsService.customDialog('pills-code-dialog', {
+          locals: {
+            entry
+          }
+        }).then(res => {
+          if (!res) {
+            NotificationsService.toast('Cannot copy to clipboard');
+          } else {
+            NotificationsService.toast('Copied to clipboard');
+          }
+        });
+      },
+      xliff: (entry) => {
+        
+      }
     };
 
     let _keylistenerTimeout;

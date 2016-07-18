@@ -1,15 +1,20 @@
-(function() {
+(function(angular) {
   'use strict';
 
   class NotificationsService {
     constructor($mdToast, $mdDialog) {
       Object.assign(this, {
         $mdToast,
-        $mdDialog
+        $mdDialog,
+        customDialogs: {}
       });
     }
 
     error(msg) {
+      this.$mdToast.show(this.$mdToast.simple().textContent(msg));
+    }
+
+    toast(msg) {
       this.$mdToast.show(this.$mdToast.simple().textContent(msg));
     }
 
@@ -30,7 +35,20 @@
         .cancel(cancel);
       return this.$mdDialog.show(confirm);
     }
+
+    registerCustomDialog(key, options) {
+      this.customDialogs[key] = angular.extend({
+        clickOutsideToClose:true
+      }, options);
+    }
+
+    customDialog(key, overrides) {
+      return this.$mdDialog.show(angular.extend({},
+        this.customDialogs[key],
+        overrides
+      ));
+    }
   }
 
   module.exports = NotificationsService;
-})();
+})(global.angular);

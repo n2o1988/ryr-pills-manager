@@ -161,7 +161,7 @@
 
 <!-- actions -->
 <div layout="row" layout-align="end start" layout-margin>
-  <div class="actions-bottom-right has-fab-speed-dial">
+  <div class="actions-bottom-right ">
     <md-button class="md-fab  md-scale md-primary" aria-label="Prev"
                ng-click="$ctrl.prevKey()" ng-disabled="$ctrl.isPrevDisabled()">
       <md-tooltip md-direction="left">Prev key</md-tooltip>
@@ -174,32 +174,26 @@
       <md-icon>arrow_forward</md-icon>
     </md-button>
 
-    <!--<md-button class="md-fab md-scale md-accent" aria-label="Save"-->
-         <!--ng-click="$ctrl.save()" ng-disabled="$ctrl.isSaveDisabled()">-->
-      <!--<md-tooltip md-direction="top">Save</md-tooltip>-->
-      <!--<md-icon>arrow_forward</md-icon>-->
-    <!--</md-button>-->
-
-    <md-fab-speed-dial md-open="$ctrl.saveMenuOpen" md-direction="up"
-                       class="md-scale">
+    <md-fab-speed-dial md-open="$ctrl.saveMenuOpen" md-direction="left"
+       class="md-scale md-fab-bottom-right ng-hide" ng-show="$ctrl.selectedKey">
       <md-fab-trigger>
-        <md-button aria-label="menu" class="md-fab md-warn">
+        <md-button aria-label="menu" class="md-fab md-accent">
           <md-icon>save</md-icon>
         </md-button>
       </md-fab-trigger>
       <md-fab-actions>
-
-        <md-button aria-label="Text" class="md-fab md-raised md-mini">
-          <md-tooltip md-direction="left">Show html value for this key</md-tooltip>
-          <md-icon>code</md-icon>
+        <md-button aria-label="Download all" class="md-fab md-raised md-mini">
+          <md-tooltip md-direction="top">Export XLIFF for the whole dictionary</md-tooltip>
+          <md-icon>playlist_add_check</md-icon>
         </md-button>
         <md-button aria-label="Download" class="md-fab md-raised md-mini">
-          <md-tooltip md-direction="left">Export XLIFF for this file</md-tooltip>
+          <md-tooltip md-direction="top">Export XLIFF for this file</md-tooltip>
           <md-icon>file_download</md-icon>
         </md-button>
-        <md-button aria-label="Download all" class="md-fab md-raised md-mini md-accent">
-          <md-tooltip md-direction="left">Export XLIFF for the whole dictionary</md-tooltip>
-          <md-icon>playlist_add_check</md-icon>
+        <md-button aria-label="Text" class="md-fab md-raised md-mini"
+          ng-click="$ctrl.exportOptions.code($ctrl.selectedKey)">
+          <md-tooltip md-direction="top">Show html value for this key</md-tooltip>
+          <md-icon>code</md-icon>
         </md-button>
       </md-fab-actions>
     </md-fab-speed-dial>
