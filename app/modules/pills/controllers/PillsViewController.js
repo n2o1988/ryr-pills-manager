@@ -56,6 +56,7 @@
       if (!listItem.isPill) {
         listItem.pillIcon = null;
       }
+      listItem.touched = true;
     };
 
     this.doneOverride = (entry) => {
@@ -69,6 +70,7 @@
     this.setEditMode = (listItem, editMode = true) => {
       if (!listItem._backupText && editMode && !listItem.editMode) {
         listItem._backupText = listItem.text;
+        listItem.touched = true;
       }
 
       listItem.editMode = editMode;
@@ -95,6 +97,13 @@
       });
     };
 
+    this.showPreview = (entry) => {
+      NotificationsService.customDialog('pills-preview-dialog', {
+        title: entry.key,
+        content: entry.updatedValue
+      });
+    };
+
     // Export options
     this.exportOptions = {
       code: (entry) => {
@@ -103,15 +112,28 @@
             entry
           }
         }).then(res => {
-          if (!res) {
-            NotificationsService.toast('Cannot copy to clipboard');
-          } else {
+          if (res) {
             NotificationsService.toast('Copied to clipboard');
+          } else if (res === false) {
+            NotificationsService.toast('Cannot copy to clipboard');
           }
         });
       },
       xliff: (entry) => {
-        
+        const targets = entry ? [entry] : this.dictionary.flatten.filter(item => item.touched);
+        if (!targets.length) {
+          NotificationsService.error('No keys have been modified');
+        } else {
+          NotificationsService.confirm('Confirm export', `The export will include ${targets.length} keys. Proceed?`)
+          .then(() => {
+            PillsDataService.exportXliff(targets)
+              .then(() => {
+                NotificationsService.toast('Your xliff has been successfully exported');
+              }).catch(err => {
+                NotificationsService.error('Oops, there was a problem: ', err);
+            });
+          });
+        }
       }
     };
 

@@ -34,6 +34,11 @@
             <h3>
               <md-icon>{{entry.done ? 'check_box' : 'check_box_outline_blank'}}</md-icon>
               {{ entry.keyPart }}
+
+              <md-icon class="touched" ng-if="entry.touched">
+                <md-tooltip md-direction="top">This key has been modified</md-tooltip>
+                new_releases
+              </md-icon>
             </h3>
             <h4 class="key-subheading">{{ entry.title }}</h4>
           </div>
@@ -71,12 +76,22 @@
             <md-card-title-text>
               <span class="md-headline">{{$ctrl.dictionary.hierarchical.navitaire.parking.provider.name[$ctrl.selectedKey.providerCode]}}</span>
               <span class="md-subhead">{{$ctrl.selectedKey.title}}</span>
-              <span class="md-subhead">{{$ctrl.selectedKey.key}}</span>
+              <span class="md-subhead">
+                {{$ctrl.selectedKey.key}}
+                <md-button ng-click="$ctrl.showPreview($ctrl.selectedKey)" class="md-icon-button">
+                  <md-tooltip md-direction="top">Show preview</md-tooltip>
+                  <md-icon>remove_red_eye</md-icon>
+                </md-button>
+              </span>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
           </md-card-content>
           <md-card-actions layout="row" layout-align="end center">
+            <md-button class="md-icon-button" ng-if="$ctrl.selectedKey.touched">
+              <md-tooltip md-direction="top">This key has been modified</md-tooltip>
+              <md-icon ng-class="{'md-accent': $ctrl.selectedKey.done}">new_releases</md-icon>
+            </md-button>
             <md-button class="md-icon-button" ng-if="$ctrl.selectedKey.done">
               <md-tooltip md-direction="top">All pills have been set up</md-tooltip>
               <md-icon class="md-accent">check</md-icon>
@@ -182,11 +197,13 @@
         </md-button>
       </md-fab-trigger>
       <md-fab-actions>
-        <md-button aria-label="Download all" class="md-fab md-raised md-mini">
+        <md-button aria-label="Download all" class="md-fab md-raised md-mini"
+          ng-click="$ctrl.exportOptions.xliff()">
           <md-tooltip md-direction="top">Export XLIFF for the whole dictionary</md-tooltip>
           <md-icon>playlist_add_check</md-icon>
         </md-button>
-        <md-button aria-label="Download" class="md-fab md-raised md-mini">
+        <md-button aria-label="Download" class="md-fab md-raised md-mini"
+          ng-click="$ctrl.exportOptions.xliff($ctrl.selectedKey)">
           <md-tooltip md-direction="top">Export XLIFF for this file</md-tooltip>
           <md-icon>file_download</md-icon>
         </md-button>

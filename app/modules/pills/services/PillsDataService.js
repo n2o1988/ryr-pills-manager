@@ -3,10 +3,12 @@
   'use strict';
 
   class PillsDataService {
-    constructor(PouchDBService, $http) {
+    constructor($http, XliffService, IOService, $q) {
       Object.assign(this, {
-        PouchDBService,
-        $http
+        $http,
+        $q,
+        XliffService,
+        IOService
       });
       this.NAVITAIRE_URL = '/apps/ryanair/i18n.frontend.navitaire.en-ie.json';
     }
@@ -42,12 +44,18 @@
       }
 
       // list items
-      const listItems = Array.from(element.getElementsByTagName('li') || []).map(item => ({
-        value: item.innerHTML,
-        text: item.innerText,
-        isPill: item.classList.contains('pill'),
-        pillIcon: (item.getAttribute('pill-icon') || '').replace(/“|”/g, '')
-      }));
+      const listItems = Array.from(element.getElementsByTagName('li') || []).map(item => {
+        const iconValue = item.getAttribute('pill-icon') || '';
+        const pillIcon = iconValue.replace(/“|”/g, '');
+
+        return {
+          value: item.innerHTML,
+          text: item.innerText,
+          isPill: item.classList.contains('pill'),
+          pillIcon,
+          touched: pillIcon !== iconValue
+        };
+      });
 
       const relevantPills = Object.keys(this.relevantPillIcons).map(key => this.relevantPillIcons[key].val);
 
@@ -64,6 +72,7 @@
     }
 
     _flattenDictionary(partKey, dict) {
+      const _this = this;
       return Object.keys(dict).map(key => {
         if (typeof dict[key] !== 'string') {
           return this._flattenDictionary(`${partKey}.${key}`, dict[key]);
@@ -71,7 +80,23 @@
           return [this._addMetaData({
             key: `${partKey}.${key}`,
             value: dict[key],
-            keyPart: key
+            keyPart: key,
+            get touched() {
+              return (this.listItems || []).some(item => item.touched);
+            },
+            get updatedValue() {
+              const element = document.createElement('div');
+              element.innerHTML = this.value;
+              const ul = element.getElementsByTagName('ul')[0];
+              if (!ul) {
+                return this.value;
+              }
+              ul.innerHTML = this.listItems.map(item => item.isPill ?
+                `<li class="pill" pill-icon="${item.pillIcon}"><span>${item.text}</span></li>` :
+                `<li><span>${item.text}</span></li>`).join('');
+
+              return element.innerHTML;
+            }
           })];
         }
       }).reduce((a1, a2) => a1.concat(a2), []);
@@ -89,6 +114,26 @@
     isEntryDone(listItems) {
       const relevantPills = Object.keys(this.relevantPillIcons).map(key => this.relevantPillIcons[key].val);
       return relevantPills.every(icon => listItems.some(item => item.pillIcon === icon));
+    }
+
+    iconValueToObject(glyphIcon) {
+      const pills = this.relevantPillIcons;
+      const key = Object.keys(pills).find(key => pills[key].val === glyphIcon);
+      return pills[key]
+    }
+
+    exportXliff(entries) {
+      const defer = this.$q.defer();
+        const content = this.XliffService.export(entries);
+        this.IOService.save(content, 'xliff', error => {
+          if (error) {
+            console.error('Error: ', error);
+            defer.reject(error);
+          } else {
+            defer.resolve();
+          }
+        });
+      return defer.promise;
     }
   }
 

@@ -1,0 +1,40 @@
+<md-dialog aria-label="Preview dialog"  ng-cloak flex="60">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>{{$ctrl.title}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="$ctrl.cancel()">
+        <md-icon aria-label="Close dialog">close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <!-- More info -->
+      <!--<div class="md-headline">More info</div>-->
+      <!--<md-divider></md-divider>-->
+
+      <md-content>
+        <md-tabs md-dynamic-height md-border-bottom>
+          <md-tab label="More info">
+            <md-content class="md-padding pills-preview-more-info">
+              <div ng-bind-html="$ctrl.content"></div>
+            </md-content>
+          </md-tab>
+          <md-tab label="Pills">
+            <md-content class="md-padding pills-preview-pills">
+              <div ng-html-compile="$ctrl.content"></div>
+            </md-content>
+          </md-tab>
+        </md-tabs>
+      </md-content>
+
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button md-autofocus ng-click="$ctrl.cancel()">
+      Close
+    </md-button>
+  </md-dialog-actions>
+</md-dialog>

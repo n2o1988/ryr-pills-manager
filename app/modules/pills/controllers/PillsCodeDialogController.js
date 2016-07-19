@@ -4,7 +4,7 @@
 
   function PillsCodeDialogController(entry, $mdDialog) {
     this.title = entry.key;
-    this.code = entry.value;
+    this.code = entry.updatedValue;
 
     this.cancel = $mdDialog.hide;
     this.copy = (id) => {

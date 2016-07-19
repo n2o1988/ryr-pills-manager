@@ -145,3 +145,52 @@ md-content.has-footer {
   width: 100%;
   height: 150px;
 }
+
+/* pills preview */
+.pills-preview-more-info {
+  font-size: 14px;
+  color: #828790;
+}
+.pills-preview-more-info h1 {
+  font-size: 18px;
+  color: #2E2E2E;
+}
+.pills-preview-more-info ul {
+  padding-left: 20px;
+}
+.pills-preview-more-info a {
+  text-decoration: none;
+  color: #2091EB;
+}
+
+.pills-preview-pills h1,
+.pills-preview-pills p,
+.pills-preview-pills a,
+.pills-preview-pills li:not(.pill){
+  display: none;
+}
+
+.pills-preview-pills ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.pills-preview-pills li {
+  display: inline-block;
+  border-radius: 8px;
+  margin-right: 10px;
+  font-size: 12px;
+  background: #ebf2fb;
+  color: #94989d;
+  padding: 6px 10px 6px 7px;
+}
+.pills-preview-pills md-icon {
+  font-size: 15px;
+  color: #828790;
+  margin-right: 6px;
+}
+
+md-icon.touched {
+  position: absolute;
+  right: 5px;
+}
