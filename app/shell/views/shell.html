@@ -5,8 +5,8 @@
       <md-progress-circular class="md-accent" md-mode="indeterminate"></md-progress-circular>
     </div>
   </centered>
-  <md-toolbar class="md-whiteframe-z3 main-toolbar">
-    <!--
+  <md-toolbar class="md-whiteframe-z3 main-toolbar draggable">
+
     <div ng-if="shell.platform() === 'darwin'" class="md-toolbar-tools windows-controls" flex layout-align="start start">
       <a class="md-icon-button osx-control close" md-no-ink ng-click="shell.closeApp()">
         <svg x="0px" y="0px" viewBox="0 0 6.4 6.4">
@@ -47,7 +47,7 @@
         </svg>
       </a>
     </div>
-    -->
+    
     <div class="md-toolbar-tools">
       <md-button class="md-icon-button" md-no-ink ng-repeat="module in shell.modules" ng-if="!$state.is('app.pills.environments')"
                  ui-sref="app.pills.environments({ selectedEnv: $stateParams.selectedEnv })" ng-class="{ selected: $state.includes('{{ module.info.state }}') }">
