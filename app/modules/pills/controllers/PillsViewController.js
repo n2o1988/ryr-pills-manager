@@ -87,13 +87,17 @@
       }
       entry.listItems.push({
         text: '',
-        editMode: true
+        editMode: true,
+        touched: true
       });
     };
     this.removeListItem = (entry, listItem) => {
       NotificationsService.confirm('Confirm delete', 'Are you sure you want to delete this item?')
       .then(() => {
         entry.listItems.splice(entry.listItems.indexOf(listItem), 1);
+        if (entry.listItems.length) {
+          entry.listItems[0].touched = true;
+        }
       });
     };
 
