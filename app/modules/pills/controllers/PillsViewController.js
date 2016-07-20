@@ -130,7 +130,9 @@
               .then(() => {
                 NotificationsService.toast('Your xliff has been successfully exported');
               }).catch(err => {
-                NotificationsService.error('Oops, there was a problem: ', err);
+                if (err) {
+                  NotificationsService.error('Oops, there was a problem: ', err);
+                }
             });
           });
         }

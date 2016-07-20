@@ -11,6 +11,7 @@
         IOService
       });
       this.NAVITAIRE_URL = '/apps/ryanair/i18n.frontend.navitaire.en-ie.json';
+      this.KEY_PREFIX = 'navitaire.parking.provider.info';
     }
 
     get environments() {
@@ -21,6 +22,10 @@
         { name: 'UAT', url: 'https://uat-aem.ryanair.com' },
         { name: 'LIVE', url: 'https://www.ryanair.com' }
       ];
+    }
+
+    get defaultEnv() {
+      return this.environments.find(env => env.name === 'LIVE') || this.environments[0];
     }
 
     get relevantPillIcons() {
@@ -105,10 +110,44 @@
     loadFromHttp(env) {
       return this.$http.get(`${env.url}${this.NAVITAIRE_URL}`)
         .then(result => ({
-          flatten: this._flattenDictionary('navitaire.parking.provider.info',
+          flatten: this._flattenDictionary(this.KEY_PREFIX,
             result.data.navitaire.parking.provider.info),
           hierarchical: result.data
         }));
+    }
+
+    loadFromXliff(file) {
+      const defer = this.$q.defer();
+      // get file content
+      this.IOService.open(file).then(data => {
+        // parse
+        const rawEntries = this.XliffService.import(data).reduce((obj, entry) => {
+          if (entry.key.indexOf(this.KEY_PREFIX) === 0) {
+            obj[entry.key.substr(this.KEY_PREFIX.length + 1)] = entry.value;
+          }
+          return obj;
+        }, {});
+
+        const entries = this._flattenDictionary(this.KEY_PREFIX, rawEntries);
+
+        // get meta information from live navitaire dictionary
+        const liveInfo = this.environments.find(env => env.name === this.defaultEnv.name);
+        this.$http.get(`${liveInfo.url}${this.NAVITAIRE_URL}`)
+          .then(res => {
+            defer.resolve({
+              flatten: entries,
+              hierarchical: res.data
+            });
+          }).catch(() => {
+            // whatever error we just don't return hierarchical info
+            defer.resolve({
+              flatten: entries
+            })
+          });
+      }).catch(err => {
+        defer.reject(err);
+      });
+      return defer.promise;
     }
 
     isEntryDone(listItems) {
@@ -123,17 +162,8 @@
     }
 
     exportXliff(entries) {
-      const defer = this.$q.defer();
-        const content = this.XliffService.export(entries);
-        this.IOService.save(content, 'xliff', error => {
-          if (error) {
-            console.error('Error: ', error);
-            defer.reject(error);
-          } else {
-            defer.resolve();
-          }
-        });
-      return defer.promise;
+      const content = this.XliffService.export(entries);
+      return this.IOService.save(content, 'xliff');
     }
   }
 

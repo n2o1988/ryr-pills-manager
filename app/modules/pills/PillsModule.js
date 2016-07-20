@@ -54,7 +54,15 @@
               dictionary: ['$stateParams', 'PillsDataService', 'NotificationsService', '$state',
                 function ($stateParams, PillsDataService, NotificationsService, $state) {
                 if ($stateParams.selectedEnv) {
-                  return PillsDataService.loadFromHttp($stateParams.selectedEnv).catch(error => {
+                  let promise;
+                  if ($stateParams.selectedEnv.path) {
+                    // load from file
+                    promise = PillsDataService.loadFromXliff($stateParams.selectedEnv.path);
+                  } else {
+                    promise = PillsDataService.loadFromHttp($stateParams.selectedEnv);
+                  }
+
+                  return promise.catch(error => {
                     console.error('error: ', error);
                     NotificationsService.error('Cannot load the dictionary');
                     $state.go(`${moduleConfig.state}.environments`);
@@ -96,9 +104,9 @@
 
     angular.module('electron-app').service('PillsDataService', ['$http', 'XliffService', 'IOService', '$q', PillsDataService]);
     angular.module('electron-app').service('XliffService', XliffService);
-    angular.module('electron-app').service('IOService', IOService);
+    angular.module('electron-app').service('IOService', ['$q', IOService]);
     angular.module('electron-app').controller('PillsEnvironmentsController', ['$state', '$stateParams', 'PillsDataService',
-      PillsEnvironmentsController]);
+      'IOService', PillsEnvironmentsController]);
     angular.module('electron-app').controller('PillsViewController', PillsViewController);
     angular.module('electron-app').controller('PillsCodeDialogController', PillsCodeDialogController);
     angular.module('electron-app').controller('PillsPreviewDialogController', PillsPreviewDialogController);

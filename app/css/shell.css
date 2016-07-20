@@ -194,3 +194,7 @@ md-icon.touched {
   position: absolute;
   right: 5px;
 }
+.inline-loading md-progress-circular {
+  display: inline-block;
+  vertical-align: middle;
+}

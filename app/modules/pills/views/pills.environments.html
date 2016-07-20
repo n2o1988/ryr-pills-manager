@@ -6,13 +6,21 @@
       <md-radio-button ng-repeat="env in $ctrl.environments" ng-value="env" class="md-primary">{{env.name}}</md-radio-button>
     </md-radio-group>
   </div>
+  <div flex layout-fill>
+    or
+    <loading-button loading="$ctrl.loading" class="inline-loading" diameter="60">
+      <md-button class="md-raised" ng-show="!$ctrl.loading" ng-click="$ctrl.loadFile()">
+        import xliff file
+      </md-button>
+    </loading-button>
+  </div>
 
   <!-- actions -->
   <div layout="row" layout-align="end start" layout-margin>
     <div class="actions-bottom-right">
       <loading-button loading="$ctrl.loading" diameter="80">
-        <md-button class="md-fab md-scale md-primary" aria-label="Load" ng-click="$ctrl.loading = true;"
-           ng-disabled="!$ctrl.selectedEnv" ui-sref="app.pills.view({ selectedEnv: $ctrl.selectedEnv })">
+        <md-button class="md-fab md-scale md-primary" aria-label="Load" ng-click="$ctrl.load()"
+           ng-disabled="!$ctrl.selectedEnv">
           <md-tooltip md-direction="left">Load dictionary</md-tooltip>
           <md-icon>get_app</md-icon>
         </md-button>

@@ -53,6 +53,19 @@
       return node;
     };
 
+    import(content) {
+      const xmlDoc = new DOMParser().parseFromString(content, 'application/xml');
+
+      const entries = xmlDoc.getElementsByTagName('trans-unit');
+      if (entries.length) {
+        return Array.from(entries).map(entry => ({
+          key: entry.getElementsByTagName('source')[0].childNodes[0].data,
+          value: entry.getElementsByTagName('target')[0].childNodes[0].data
+        }));
+      }
+
+      return [];
+    }
 
     export(entries) {
       this.xmlDoc = document.implementation.createDocument(null, null);

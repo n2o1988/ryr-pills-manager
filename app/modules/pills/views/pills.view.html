@@ -71,7 +71,7 @@
       <div ng-if="::$ctrl.selectedKey">
         <!-- Provider -->
         <md-card>
-          <img class="provider-logo" ng-if="$ctrl.selectedKey.logo" ng-src="{{$ctrl.selectedKey.logo}}" />
+          <img class="provider-logo" ng-if="$ctrl.selectedKey.logo" ng-src="{{$ctrl.selectedKey.logo}}" alt="Logo not available"/>
           <md-card-title>
             <md-card-title-text>
               <span class="md-headline">{{$ctrl.dictionary.hierarchical.navitaire.parking.provider.name[$ctrl.selectedKey.providerCode]}}</span>
