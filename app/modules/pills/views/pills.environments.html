@@ -5,14 +5,14 @@
     <md-radio-group ng-model="$ctrl.selectedEnv">
       <md-radio-button ng-repeat="env in $ctrl.environments" ng-value="env" class="md-primary">{{env.name}}</md-radio-button>
     </md-radio-group>
-  </div>
-  <div flex layout-fill>
-    or
-    <loading-button loading="$ctrl.loading" class="inline-loading" diameter="60">
-      <md-button class="md-raised" ng-show="!$ctrl.loading" ng-click="$ctrl.loadFile()">
-        import xliff file
-      </md-button>
-    </loading-button>
+    <p>
+      or
+      <loading-button loading="$ctrl.loading" class="inline-loading" diameter="60">
+        <md-button class="md-raised" ng-show="!$ctrl.loading" ng-click="$ctrl.loadFile()">
+          import xliff file
+        </md-button>
+      </loading-button>
+    </p>
   </div>
 
   <!-- actions -->
