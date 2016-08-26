@@ -91,7 +91,12 @@
         NotificationsService.registerCustomDialog('pills-preview-dialog', {
           templateUrl: `${moduleConfig.path}/views/pills.preview.dialog.html`,
           controller: 'PillsPreviewDialogController as $ctrl'
-        })
+        });
+
+        NotificationsService.registerCustomDialog('pills-save-temp-dialog', {
+          templateUrl: `${moduleConfig.path}/views/pills.save.temp.dialog.html`,
+          controller: 'PillsSaveTempDialogController as $ctrl'
+        });
       });
 
     var PillsDataService = require('./services/PillsDataService');
@@ -101,6 +106,7 @@
     var PillsEnvironmentsController = require('./controllers/PillsEnvironmentsController');
     var PillsCodeDialogController = require('./controllers/PillsCodeDialogController');
     var PillsPreviewDialogController = require('./controllers/PillsPreviewDialogController');
+    var PillsSaveTempDialogController = require('./controllers/PillsSaveTempDialogController');
 
     angular.module('electron-app').service('PillsDataService', ['$http', 'XliffService', 'IOService', '$q', PillsDataService]);
     angular.module('electron-app').service('XliffService', XliffService);
@@ -110,6 +116,7 @@
     angular.module('electron-app').controller('PillsViewController', PillsViewController);
     angular.module('electron-app').controller('PillsCodeDialogController', PillsCodeDialogController);
     angular.module('electron-app').controller('PillsPreviewDialogController', PillsPreviewDialogController);
+    angular.module('electron-app').controller('PillsSaveTempDialogController', PillsSaveTempDialogController);
 
     // directives
     require('./directives/ng-html-compile');

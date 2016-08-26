@@ -12,6 +12,7 @@
       });
       this.NAVITAIRE_URL = '/apps/ryanair/i18n.frontend.navitaire.en-ie.json';
       this.KEY_PREFIX = 'navitaire.parking.provider.info';
+      this.TEMP_DATA_KEY = 'ryr-pills-storage';
     }
 
     get environments() {
@@ -150,6 +151,10 @@
       return defer.promise;
     }
 
+    loadFromTempData() {
+      return this.IOService.retrieveTempData(this.TEMP_DATA_KEY);
+    }
+
     isEntryDone(listItems) {
       const relevantPills = Object.keys(this.relevantPillIcons).map(key => this.relevantPillIcons[key].val);
       return relevantPills.every(icon => listItems.some(item => item.pillIcon === icon));
@@ -164,6 +169,14 @@
     exportXliff(entries) {
       const content = this.XliffService.export(entries);
       return this.IOService.save(content, 'xliff');
+    }
+
+    saveTempData(selectedEnv, data) {
+      return this.IOService.saveTempData({
+        env: selectedEnv,
+        timestamp: new Date().toUTCString(),
+        data
+      });
     }
   }
 

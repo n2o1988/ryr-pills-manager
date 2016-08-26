@@ -56,6 +56,26 @@
       });
       return defer.promise;
     }
+
+    saveTempData(key, value) {
+      if (window.localStorage) {
+        localStorage.setItem(key, typeof value === string ? value : JSON.stringify(value));
+        return true;
+      }
+      return false;
+    }
+
+    retrieveTempData(key, asObject = true) {
+      if (window.localStorage){
+        const val = localStorage.getItem(key);
+        if (asObject && val) {
+          return JSON.parse(val);
+        } else if (val) {
+          return val;
+        }
+      }
+      return null;
+    }
   }
 
   module.exports = IOService;

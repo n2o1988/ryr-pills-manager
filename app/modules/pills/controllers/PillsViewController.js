@@ -6,6 +6,7 @@
     // pill icons
     this.PILLS = PillsDataService.relevantPillIcons;
     this.dictionary = dictionary;
+    console.log($stateParams);
 
     this.toggleSidenav = () => {
       $mdSidenav('left-sidenav').toggle();
@@ -164,8 +165,30 @@
       }
     };
     document.addEventListener('keydown', handleWindowKeyPressed);
+
+    const onBeforeUnload = (e) => {
+      console.log('onBeforeUnload: ', e);
+      const touched = this.dictionary.flatten.filter(item => item.touched);
+      if (touched.length) {
+        e.returnValue = false;
+        //setTimeout(function() {
+        //  console.log('triggering');
+        //  window.close();
+        //}, 1000);
+        NotificationsService.customDialog('pills-save-temp-dialog')
+          .then(res => {
+            switch(res) {
+
+            }
+          });
+        return false;
+      }
+    };
+    window.addEventListener('beforeunload', onBeforeUnload);
+
     $scope.$on('$destroy', () => {
       document.removeEventListener('keydown', handleWindowKeyPressed);
+      window.removeEventListener('beforeunload', onBeforeUnload);
     });
   }
 

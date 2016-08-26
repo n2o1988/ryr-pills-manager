@@ -1,0 +1,28 @@
+<md-dialog aria-label="Save temp"  ng-cloak flex="60">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Confirm close</h2>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+
+      <md-content>
+        You have unsaved changes.
+      </md-content>
+
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button md-autofocus ng-click="$ctrl.dialog.hide('close')">
+      Close and discard changes
+    </md-button>
+    <md-button md-autofocus ng-click="$ctrl.dialog.hide('cancel')">
+      Stay on the page
+    </md-button>
+    <md-button md-autofocus ng-click="$ctrl.dialog.hide('save')">
+      Save data and close
+    </md-button>
+  </md-dialog-actions>
+</md-dialog>
