@@ -1,15 +1,15 @@
 (function(angular) {
 
   angular.module('electron-app')
-  .directive('scrollToElement', function scrollToElement() {
+  .directive('scrollToElement', function scrollToElement($timeout) {
     return {
       restrict: 'A',
       link(scope, element, attrs) {
         const tolerance = attrs.scrollTolerance ? parseInt(attrs.scrollTolerance) || 0 : 0;
-
-        attrs.$observe('scrollToElement', (val) => {
+        const scrollTo = (val) => {
           if (val) {
             const entry = document.getElementById(val);
+            console.log(val, entry);
             if (entry) {
               // check if visible
 
@@ -29,7 +29,12 @@
               }
             }
           }
-        });
+        };
+
+        attrs.$observe('scrollToElement', scrollTo);
+        $timeout(() => {
+          scrollTo(attrs.scrollToElement);
+        }, 200);
       }
     }
   });

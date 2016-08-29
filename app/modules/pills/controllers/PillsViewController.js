@@ -4,6 +4,7 @@
   function PillsViewController($scope, $state, $stateParams, PillsDataService, NotificationsService, $timeout,
      $mdSidenav, dictionary) {
     // pill icons
+    let keysModified = false;
     this.PILLS = PillsDataService.relevantPillIcons;
     this.dictionary = dictionary;
 
@@ -57,6 +58,7 @@
         listItem.pillIcon = null;
       }
       listItem.touched = true;
+      keysModified = true;
     };
 
     this.doneOverride = (entry) => {
@@ -71,6 +73,7 @@
       if (!listItem._backupText && editMode && !listItem.editMode) {
         listItem._backupText = listItem.text;
         listItem.touched = true;
+        keysModified = true;
       }
 
       listItem.editMode = editMode;
@@ -90,6 +93,7 @@
         editMode: true,
         touched: true
       });
+      keysModified = true;
     };
     this.removeListItem = (entry, listItem) => {
       NotificationsService.confirm('Confirm delete', 'Are you sure you want to delete this item?')
@@ -98,6 +102,7 @@
         if (entry.listItems.length) {
           entry.listItems[0].touched = true;
         }
+        keysModified = true;
       });
     };
 
@@ -124,6 +129,7 @@
         });
       },
       xliff: (entry) => {
+        const wholeDictionary = !entry;
         const targets = entry ? [entry] : this.dictionary.flatten.filter(item => item.touched);
         if (!targets.length) {
           NotificationsService.error('No keys have been modified');
@@ -133,6 +139,9 @@
             PillsDataService.exportXliff(targets)
               .then(() => {
                 NotificationsService.toast('Your xliff has been successfully exported');
+                if (wholeDictionary) {
+                  keysModified = false;
+                }
               }).catch(err => {
                 if (err) {
                   NotificationsService.error('Oops, there was a problem: ', err);
@@ -177,8 +186,7 @@
     const onBeforeUnload = (e) => {
       console.log('onBeforeUnload: ', e);
       const callback = e.name === '$stateChangeStart' ? forceChangePage : forceClose;
-      const touched = this.dictionary.flatten.filter(item => item.touched);
-      if (touched.length && !_forceCloseFlag) {
+      if (keysModified && !_forceCloseFlag) {
         e.returnValue = false;
         NotificationsService.customDialog('pills-save-temp-dialog')
           .then(res => {
@@ -187,6 +195,7 @@
                 callback();
                 break;
               case 'save':
+                this.dictionary.selectedKeyIndex = this.selectedKey ? this.selectedKey.key : null;
                 PillsDataService.saveTempData($stateParams.selectedEnv, this.dictionary)
                   .then(callback)
                   .catch(NotificationsService.error);
@@ -214,7 +223,7 @@
     // init
     if (this.dictionary.selectedKeyIndex) {
       // pre-select key if coming from a temp save
-      this.selectedKey(this.dictionary.flatten.find(e => e.key === this.dictionary.selectedKeyIndex));
+      this.selectKey(this.dictionary.flatten.find(e => e.key === this.dictionary.selectedKeyIndex));
     }
   }
 

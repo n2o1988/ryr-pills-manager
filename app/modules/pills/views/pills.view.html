@@ -179,7 +179,7 @@
   <div class="actions-bottom-right ">
     <md-button class="md-fab  md-scale md-primary" aria-label="Prev"
                ng-click="$ctrl.prevKey()" ng-disabled="$ctrl.isPrevDisabled()">
-      <md-tooltip md-direction="left">Prev key</md-tooltip>
+      <md-tooltip md-direction="top">Prev key</md-tooltip>
       <md-icon>arrow_back</md-icon>
     </md-button>
 
@@ -193,6 +193,7 @@
        class="md-scale md-fab-bottom-right ng-hide" ng-show="$ctrl.selectedKey">
       <md-fab-trigger>
         <md-button aria-label="menu" class="md-fab md-accent">
+          <md-tooltip>Export options</md-tooltip>
           <md-icon>save</md-icon>
         </md-button>
       </md-fab-trigger>

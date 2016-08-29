@@ -7,12 +7,17 @@
     .config(function($mdThemingProvider) {
       const palette = $mdThemingProvider.extendPalette('blue', {
         //TODO customize
+        '500': '#073590',
+        '800': '#2994e6'
+      });
+      const accentPalett = $mdThemingProvider.extendPalette('yellow', {
+        '600': '#F1C933'
       });
       $mdThemingProvider.definePalette('ryanair', palette);
-
+      $mdThemingProvider.definePalette('ryanairAccent', accentPalett);
       $mdThemingProvider.theme('default')
         .primaryPalette('ryanair')
-        .accentPalette('green', {
+        .accentPalette('ryanairAccent', {
           'default': '600'
         });
     })

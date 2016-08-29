@@ -182,7 +182,7 @@
       const defer = this.$q.defer();
       const payload = {
         env: selectedEnv,
-        timestamp: new Date().toUTCString(),
+        timestamp: new Date().toString(),
         data
       };
       if (this.IOService.saveTempData(this.TEMP_DATA_KEY, payload)) {

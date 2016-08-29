@@ -110,6 +110,8 @@
         $mdSidenav('sidebar').toggle();
       });
     };
+
+    document.title = this.appName;
   }
 
   module.exports = ShellController;
