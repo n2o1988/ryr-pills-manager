@@ -1,12 +1,11 @@
 (function(angular) {
   'use strict';
 
-  function PillsViewController($scope, $stateParams, PillsDataService, NotificationsService, $timeout, $mdSidenav,
-      dictionary) {
+  function PillsViewController($scope, $state, $stateParams, PillsDataService, NotificationsService, $timeout,
+     $mdSidenav, dictionary) {
     // pill icons
     this.PILLS = PillsDataService.relevantPillIcons;
     this.dictionary = dictionary;
-    console.log($stateParams);
 
     this.toggleSidenav = () => {
       $mdSidenav('left-sidenav').toggle();
@@ -166,30 +165,57 @@
     };
     document.addEventListener('keydown', handleWindowKeyPressed);
 
+    let _forceCloseFlag = false;
+    const forceClose = () => {
+      _forceCloseFlag = true;
+      window.close();
+    };
+    const forceChangePage = () => {
+      _forceCloseFlag = true;
+      $state.go('app.pills.environments', { selectedEnv: $stateParams.selectedEnv });
+    };
     const onBeforeUnload = (e) => {
       console.log('onBeforeUnload: ', e);
+      const callback = e.name === '$stateChangeStart' ? forceChangePage : forceClose;
       const touched = this.dictionary.flatten.filter(item => item.touched);
-      if (touched.length) {
+      if (touched.length && !_forceCloseFlag) {
         e.returnValue = false;
-        //setTimeout(function() {
-        //  console.log('triggering');
-        //  window.close();
-        //}, 1000);
         NotificationsService.customDialog('pills-save-temp-dialog')
           .then(res => {
             switch(res) {
-
+              case 'close':
+                callback();
+                break;
+              case 'save':
+                PillsDataService.saveTempData($stateParams.selectedEnv, this.dictionary)
+                  .then(callback)
+                  .catch(NotificationsService.error);
+                break;
             }
           });
         return false;
       }
+      return true;
     };
     window.addEventListener('beforeunload', onBeforeUnload);
+
+    $scope.$on('$stateChangeStart', (event, toState) => {
+      console.log('$stateChangeStart', event);
+      if (toState.name === 'app.pills.environments' && !onBeforeUnload(event)) {
+        event.preventDefault();
+      }
+    });
 
     $scope.$on('$destroy', () => {
       document.removeEventListener('keydown', handleWindowKeyPressed);
       window.removeEventListener('beforeunload', onBeforeUnload);
     });
+
+    // init
+    if (this.dictionary.selectedKeyIndex) {
+      // pre-select key if coming from a temp save
+      this.selectedKey(this.dictionary.flatten.find(e => e.key === this.dictionary.selectedKeyIndex));
+    }
   }
 
   module.exports = PillsViewController;

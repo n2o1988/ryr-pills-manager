@@ -108,8 +108,8 @@
       }).reduce((a1, a2) => a1.concat(a2), []);
     }
 
-    loadFromHttp(env) {
-      return this.$http.get(`${env.url}${this.NAVITAIRE_URL}`)
+    loadFromHttp(url) {
+      return this.$http.get(`${url}${this.NAVITAIRE_URL}`)
         .then(result => ({
           flatten: this._flattenDictionary(this.KEY_PREFIX,
             result.data.navitaire.parking.provider.info),
@@ -152,7 +152,14 @@
     }
 
     loadFromTempData() {
-      return this.IOService.retrieveTempData(this.TEMP_DATA_KEY);
+      const defer = this.$q.defer();
+      var metaData = this.getTempData();
+      if (metaData && metaData.data) {
+        defer.resolve(metaData.data);
+      } else {
+        defer.reject('Data not available')
+      }
+      return defer.promise;
     }
 
     isEntryDone(listItems) {
@@ -172,11 +179,26 @@
     }
 
     saveTempData(selectedEnv, data) {
-      return this.IOService.saveTempData({
+      const defer = this.$q.defer();
+      const payload = {
         env: selectedEnv,
         timestamp: new Date().toUTCString(),
         data
-      });
+      };
+      if (this.IOService.saveTempData(this.TEMP_DATA_KEY, payload)) {
+        defer.resolve(payload);
+      } else {
+        defer.reject('Unsupported operation');
+      }
+      return defer.promise;
+    }
+
+    getTempData() {
+      return this.IOService.retrieveTempData(this.TEMP_DATA_KEY);
+    }
+
+    deleteTempData() {
+      return this.IOService.deleteTempData(this.TEMP_DATA_KEY);
     }
   }
 

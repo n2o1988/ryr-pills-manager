@@ -58,8 +58,10 @@
                   if ($stateParams.selectedEnv.path) {
                     // load from file
                     promise = PillsDataService.loadFromXliff($stateParams.selectedEnv.path);
+                  } else if ($stateParams.selectedEnv.url) {
+                    promise = PillsDataService.loadFromHttp($stateParams.selectedEnv.url);
                   } else {
-                    promise = PillsDataService.loadFromHttp($stateParams.selectedEnv);
+                    promise = PillsDataService.loadFromTempData();
                   }
 
                   return promise.catch(error => {
@@ -97,6 +99,11 @@
           templateUrl: `${moduleConfig.path}/views/pills.save.temp.dialog.html`,
           controller: 'PillsSaveTempDialogController as $ctrl'
         });
+
+        NotificationsService.registerCustomDialog('pills-load-temp-dialog', {
+          templateUrl: `${moduleConfig.path}/views/pills.load.temp.dialog.html`,
+          controller: 'PillsLoadTempDialogController as $ctrl'
+        });
       });
 
     var PillsDataService = require('./services/PillsDataService');
@@ -107,16 +114,18 @@
     var PillsCodeDialogController = require('./controllers/PillsCodeDialogController');
     var PillsPreviewDialogController = require('./controllers/PillsPreviewDialogController');
     var PillsSaveTempDialogController = require('./controllers/PillsSaveTempDialogController');
+    var PillsLoadTempDialogController = require('./controllers/PillsLoadTempDialogController');
 
     angular.module('electron-app').service('PillsDataService', ['$http', 'XliffService', 'IOService', '$q', PillsDataService]);
     angular.module('electron-app').service('XliffService', XliffService);
     angular.module('electron-app').service('IOService', ['$q', IOService]);
     angular.module('electron-app').controller('PillsEnvironmentsController', ['$state', '$stateParams', 'PillsDataService',
-      'IOService', PillsEnvironmentsController]);
+      'IOService', 'NotificationsService', PillsEnvironmentsController]);
     angular.module('electron-app').controller('PillsViewController', PillsViewController);
     angular.module('electron-app').controller('PillsCodeDialogController', PillsCodeDialogController);
     angular.module('electron-app').controller('PillsPreviewDialogController', PillsPreviewDialogController);
     angular.module('electron-app').controller('PillsSaveTempDialogController', PillsSaveTempDialogController);
+    angular.module('electron-app').controller('PillsLoadTempDialogController', PillsLoadTempDialogController);
 
     // directives
     require('./directives/ng-html-compile');

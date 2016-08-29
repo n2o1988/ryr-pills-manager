@@ -1,0 +1,33 @@
+<md-dialog aria-label="Load temp"  ng-cloak flex="60">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Restore temporary data</h2>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+
+      <md-content>
+        There is a pending session in progress:
+        <ul>
+          <li><strong>Environment: </strong>{{::$ctrl.meta.env.origName}}</li>
+          <li><strong>Saved on: </strong>{{::$ctrl.meta.timestamp}}</li>
+          <li><strong>Keys modified: </strong>{{::$ctrl.getNumOfModifiedKeys()}}</li>
+        </ul>
+      </md-content>
+
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="$ctrl.dialog.hide('cancel')">
+      Not now
+    </md-button>
+    <md-button ng-click="$ctrl.dialog.hide('discard')">
+      Discard changes
+    </md-button>
+    <md-button md-autofocus ng-click="$ctrl.dialog.hide('load')">
+      Restore session
+    </md-button>
+  </md-dialog-actions>
+</md-dialog>

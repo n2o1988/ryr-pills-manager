@@ -3,7 +3,13 @@
   <div flex layout-fill layout="column" ng-cloak>
     <p>Select dictionary environment: </p>
     <md-radio-group ng-model="$ctrl.selectedEnv">
-      <md-radio-button ng-repeat="env in $ctrl.environments" ng-value="env" class="md-primary">{{env.name}}</md-radio-button>
+      <div ng-repeat="env in $ctrl.environments" layout="row">
+        <md-radio-button ng-value="env" class="md-primary">{{env.name}}</md-radio-button>
+        <md-button class="md-icon-button" ng-click="$ctrl.deleteTempEnv(env)" ng-if="::env.temp">
+          <md-tooltip md-direction="top">Discard changes</md-tooltip>
+          <md-icon class="md-warn">delete</md-icon>
+        </md-button>
+      </div>
     </md-radio-group>
     <p>
       or

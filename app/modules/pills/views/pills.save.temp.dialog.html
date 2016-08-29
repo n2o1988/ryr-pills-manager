@@ -8,21 +8,22 @@
     <div class="md-dialog-content">
 
       <md-content>
-        You have unsaved changes.
+        You have unsaved changes.<br/>
+        You can save your changes temporarily and restore this session later on
       </md-content>
 
     </div>
   </md-dialog-content>
   <md-dialog-actions layout="row">
     <span flex></span>
-    <md-button md-autofocus ng-click="$ctrl.dialog.hide('close')">
-      Close and discard changes
+    <md-button ng-click="$ctrl.dialog.hide('close')">
+      Discard changes
     </md-button>
-    <md-button md-autofocus ng-click="$ctrl.dialog.hide('cancel')">
+    <md-button ng-click="$ctrl.dialog.hide('cancel')">
       Stay on the page
     </md-button>
     <md-button md-autofocus ng-click="$ctrl.dialog.hide('save')">
-      Save data and close
+      Save data temporarily
     </md-button>
   </md-dialog-actions>
 </md-dialog>

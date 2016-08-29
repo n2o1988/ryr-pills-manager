@@ -59,7 +59,7 @@
 
     saveTempData(key, value) {
       if (window.localStorage) {
-        localStorage.setItem(key, typeof value === string ? value : JSON.stringify(value));
+        localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
         return true;
       }
       return false;
@@ -75,6 +75,14 @@
         }
       }
       return null;
+    }
+
+    deleteTempData(key) {
+      if (window.localStorage) {
+        localStorage.removeItem(key);
+        return true;
+      }
+      return false;
     }
   }
 
